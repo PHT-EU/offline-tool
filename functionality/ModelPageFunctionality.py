@@ -138,8 +138,7 @@ class ModelPageFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
             error_dialog.showMessage("There was no RSA private key selected to decrypt the models. Please select and load one.")
             error_dialog.exec_()
         else:
-            # TODO use relative path of loaded encrypted key
-            with open("/home/felix/PycharmProjects/train-user-client/backend/encr_sym_key", "rb") as encr_sym_key:
+            with open("./functionality/encr_sym_key", "rb") as encr_sym_key:
                 encr_key = encr_sym_key.read()
             sym_key = encryption_func.decrypt_symmetric_key(encr_key, self.pk)
             decrypted_models = encryption_func.decrypt_models(selected_models, sym_key)
@@ -162,6 +161,7 @@ class ModelPageFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
+    app.setStyle('Fusion')
     nextGui = ModelPageFunctionality()
     nextGui.show()
     sys.exit(app.exec_())

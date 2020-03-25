@@ -19,6 +19,13 @@ main.py
 ```
 from there on you can maneuver yourself through the different parts of the application. 
 
+&nbsp;
+
+To select your own encrypted symmetric key for decrypting your model files place it into this directory:
+```
+pht-offline-tool/functionality/encr_sym_key
+```
+
 
 
 ## Create standalone application

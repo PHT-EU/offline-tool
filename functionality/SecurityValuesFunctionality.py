@@ -18,6 +18,7 @@ class SecurityValuesFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
         self.setupUi(self)
         self.folder_path = ""
         self.key_filepath = ""
+        self.private_key_name = ""
         self.pk = None
         self.hash_text = ""
         self.pushButton_2.clicked.connect(self.pick_key_filepath)
@@ -36,23 +37,35 @@ class SecurityValuesFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
         self.folder_path = choosen_direc
 
         if self.folder_path != "":
+
+            key_name = QtWidgets.QInputDialog.getText(self, 'Generate private key', 'Enter a name for your private key:')
+            self.private_key_name = choosen_direc + '/' +  key_name[0]
+            print(self.private_key_name)
+
             rsa_sk, rsa_pk = encryption_func.create_rsa_keys()
-            encryption_func.store_keys(self.folder_path, rsa_sk, rsa_pk)
+            encryption_func.store_keys(self.folder_path, rsa_sk, key_name[0])
             self.label.setText("Keys got successfully generated to:" + "\n" + "\n" + choosen_direc)
+
         else:
             self.label.setText("You havent picked a valid directory")
+
 
     def pick_key_filepath(self):
         keyfile = QtWidgets.QFileDialog.getOpenFileName(self)
         self.key_filepath = keyfile[0]
-        print(keyfile[0])
+        print(self.key_filepath)
 
-        if self.key_filepath != "":
+        if self.key_filepath == self.private_key_name:
             pk = encryption_func.load_private_key(self.key_filepath)
             self.pk = pk
             self.label_2.setText("Choosen private key got succesfully loaded and ready to use:" + "\n" + "\n" + self.key_filepath)
         else:
             self.label_2.setText("You havent picked a valid keyfile")
+            error_dialog = QtWidgets.QErrorMessage()
+            error_dialog.setWindowTitle("Unvalid private key")
+            error_dialog.showMessage(
+                "The private key you selected wasn´t valid. Choose the one you generated before at: " + "\n" + self.private_key_name)
+            error_dialog.exec_()
 
     def sign_hash_btn(self):
         hash_string = self.textEdit.toPlainText()
@@ -83,6 +96,7 @@ class SecurityValuesFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
+    app.setStyle('Fusion')
     nextGui = SecurityValuesFunctionality()
     nextGui.show()
     sys.exit(app.exec_())

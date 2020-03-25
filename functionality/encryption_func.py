@@ -29,7 +29,7 @@ def create_rsa_keys():
     return private_key_pem, public_key_pem
 
 
-def store_keys(path, rsa_private_key_pem, rsa_public_key_pem):
+def store_keys(path, rsa_private_key_pem, name):
     """
     Stores the given keys at the specified path
     :param path:
@@ -38,12 +38,10 @@ def store_keys(path, rsa_private_key_pem, rsa_public_key_pem):
     :return:
     """
     print("Test store")
-    with open(os.path.join(path, "rsa_private_key"), "wb") as sk:
+    with open(os.path.join(path, name), "wb") as sk:
         sk.write(rsa_private_key_pem)
-        print("Wrote rsa private key")
-    with open(os.path.join(path, "rsa_public_key"), "wb") as pk:
-        pk.write(rsa_public_key_pem)
-        print("Wrote rsa public key")
+        print("Wrote " + name + " to " +  path)
+
 
 
 def load_private_key(path):

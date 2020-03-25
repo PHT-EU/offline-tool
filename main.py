@@ -40,6 +40,7 @@ class ChoosePageFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
+    app.setStyle('Fusion')
     nextGui = ChoosePageFunctionality()
     nextGui.show()
     sys.exit(app.exec_())

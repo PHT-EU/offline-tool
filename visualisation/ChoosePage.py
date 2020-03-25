@@ -81,7 +81,7 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "PHT offline tool"))
         self.pushButton.setText(_translate("MainWindow", "Security Values"))
         self.label_2.setText(_translate("MainWindow", "Choose your model files and decrypt them using private and encrypted symmetric key"))
         self.pushButton_2.setText(_translate("MainWindow", "Model Page"))
