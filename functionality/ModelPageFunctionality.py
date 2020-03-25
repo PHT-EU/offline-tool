@@ -1,7 +1,8 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 #from fbs_runtime.application_context.PyQt5 import ApplicationContext
-from PyQt5.QtWidgets import  QFileSystemModel, QVBoxLayout, QTreeView
+from collections import OrderedDict
 from visualisation.ModelPage import Ui_MainWindow
+from pathlib import Path
 import os
 import main
 from functionality import encryption_func
@@ -19,6 +20,8 @@ class ModelPageFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
         self.key_filepath2 = ""
         self.model_direc = ""
         self.pk = ""
+        self.direc_list = []
+        self.file_list = []
         self.selpath = []
         self.index = []
         self.decryption_process = 0
@@ -56,15 +59,31 @@ class ModelPageFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
         else:
             self.label_3.setText("You haven't picked a valid keyfile")
 
+
+    def walklevel(self, some_dir, level=1):
+        some_dir = some_dir.rstrip(os.path.sep)
+        assert os.path.isdir(some_dir)
+        num_sep = some_dir.count(os.path.sep)
+        for root, dirs, files in os.walk(some_dir):
+            yield root, dirs, files
+            num_sep_this = root.count(os.path.sep)
+            if num_sep + level <= num_sep_this:
+                del dirs[:]
+
     def choose_modelfiles_direc(self):
         choosen_direc = QtWidgets.QFileDialog.getExistingDirectory(self)
         self.model_direc = choosen_direc
-        direc_list = []
+        self.direc_list = []
+        self.listWidget.clear()
+        self.selpath = ""
+        self.label_5.setText("No models selected" + "\n" + "\n" + "Please click on the file(s) to select them")
+        self.index = []
 
-        for id in list(os.walk(self.model_direc))[0][2]:
-            direc_list.append(id)
+        for id in list(self.walklevel(self.model_direc, 1))[0][2]:
+            self.direc_list.append(id)
 
-        direc_list = sorted(direc_list, key=str.lower)
+
+        direc_list = sorted(self.direc_list, key=str.lower)
         print(direc_list)
 
         if self.model_direc != "":
@@ -89,15 +108,15 @@ class ModelPageFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
             # TODO not used yet ;)
             root_dir = towalk.pop()
             for path in os.listdir(model_direc):
-                full_path = os.path.join(model_direc, path)
-                if os.path.isdir(path):
+                if os.path.isdir(os.path.join(model_direc, path)):
                     continue
                 else:
+                    full_path = os.path.join(model_direc, path)
                     # create list of (filename, dir) tuples
                     file_list.append(full_path)
 
         file_list = sorted(file_list, key=str.lower)
-        #print(file_list)
+        print(file_list)
         return file_list
 
     def path_leaf(self, path):
@@ -105,20 +124,20 @@ class ModelPageFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
         return tail or ntpath.basename(head)
 
     def on_click_listbox(self):
-        file_list = self.walk_dir(self.model_direc)
+        self.file_list = self.walk_dir(self.model_direc)
         if self.listWidget.currentRow() not in self.index:
            self.index.append(self.listWidget.currentRow())
         elif self.listWidget.currentRow() in self.index:
             self.index.remove(self.listWidget.currentRow())
 
         if len(self.index) == 1:
-            self.selpath = [file_list[self.index[0]]]
+            self.selpath = [self.file_list[self.index[0]]]
             path = self.path_leaf(self.selpath[0])
             self.label_5.setText("Selected models:" + "\n" + "\n" + path)
         elif len(self.index) == 0:
             self.label_5.setText("No models selected" + "\n" + "\n" + "Please click on the file(s) to select them")
         else:
-            self.selpath = [file_list[x] for x in self.index]
+            self.selpath = [self.file_list[x] for x in self.index]
             model_string = "Selected models:"
             for path in self.selpath:
                 path = self.path_leaf(path)
@@ -157,6 +176,7 @@ class ModelPageFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
             error_dialog.setWindowTitle("No Decryption")
             error_dialog.showMessage("You havent decrypted any modelfiles yet, please select some in your chosen directory and decrypt them")
             error_dialog.exec_()
+
 
 
 if __name__ == "__main__":
