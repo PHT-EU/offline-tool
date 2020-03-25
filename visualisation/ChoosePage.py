@@ -26,7 +26,7 @@ class Ui_MainWindow(object):
         self.image_path = self.appctxt.get_resource('PHT_offline-tool.png')
         self.label_3.setPixmap(QtGui.QPixmap(self.image_path)) '''
 
-        self.label_3.setPixmap(QtGui.QPixmap("/home/felix/PycharmProjects/train-user-client/Qt-designer/PHT_offline-tool.png"))
+        self.label_3.setPixmap(QtGui.QPixmap("./visualisation/PHT_offline-tool.png"))
         self.label_3.setScaledContents(True)
         self.label_3.setObjectName("label_3")
         self.gridLayout.addWidget(self.label_3, 0, 0, 1, 3)
