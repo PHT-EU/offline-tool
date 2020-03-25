@@ -4,24 +4,24 @@ from PyQt5.QtWidgets import  QFileSystemModel, QVBoxLayout, QTreeView
 from visualisation.ModelPage import Ui_MainWindow
 import os
 import main
-from functionality import  encryption_func
+from functionality import encryption_func
 import ntpath
+import sys
+
+# TODO see PEP 8 checks
 
 
-class ModelPage_functionality(QtWidgets.QMainWindow, Ui_MainWindow):
-
+class ModelPageFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
     def __init__(self, parent=None):
-        super(ModelPage_functionality, self).__init__(parent)
+        super(ModelPageFunctionality, self).__init__(parent)
         self.setupUi(self)
-        self.encryp_key_path = ("","")
+        self.encryp_key_path = ("", "")
         self.key_filepath2 = ""
         self.model_direc = ""
         self.pk = ""
         self.selpath = []
         self.index = []
         self.decryption_process = 0
-
-
         self.pushButton_5.clicked.connect(self.return_page)
         self.pushButton_2.clicked.connect(self.select_encrypted_key)
         self.pushButton.clicked.connect(self.choose_modelfiles_direc)
@@ -29,12 +29,8 @@ class ModelPage_functionality(QtWidgets.QMainWindow, Ui_MainWindow):
         self.pushButton_3.clicked.connect(self.pick_key_filepath)
         self.pushButton_6.clicked.connect(self.show_decrypt_files)
 
-
-
-
-
     def return_page(self):
-        self.Choose_Page_Frame = main.ChoosePage_functionality()
+        self.Choose_Page_Frame = main.ChoosePageFunctionality()
         self.Choose_Page_Frame.show()
         self.close()
 
@@ -46,7 +42,7 @@ class ModelPage_functionality(QtWidgets.QMainWindow, Ui_MainWindow):
             self.label_2.setText("Encrypted symmetric key successfully chosen")
             print(self.encryp_key_path)
         else:
-            self.label_2.setText("You havent picked a valid keyfile")
+            self.label_2.setText("You haven't picked a valid keyfile")
 
     def pick_key_filepath(self):
         keyfile2 = QtWidgets.QFileDialog.getOpenFileName(self)
@@ -56,10 +52,9 @@ class ModelPage_functionality(QtWidgets.QMainWindow, Ui_MainWindow):
         if self.key_filepath2 != "":
             pk = encryption_func.load_private_key(self.key_filepath2)
             self.pk = pk
-            self.label_3.setText("Choosen private key got loaded successfully")
+            self.label_3.setText("Your selected private key loaded successfully")
         else:
-            self.label_3.setText("You havent picked a valid keyfile")
-
+            self.label_3.setText("You haven't picked a valid keyfile")
 
     def choose_modelfiles_direc(self):
         choosen_direc = QtWidgets.QFileDialog.getExistingDirectory(self)
@@ -91,6 +86,7 @@ class ModelPage_functionality(QtWidgets.QMainWindow, Ui_MainWindow):
         file_list = []
         towalk = [model_direc]
         while towalk:
+            # TODO not used yet ;)
             root_dir = towalk.pop()
             for path in os.listdir(model_direc):
                 full_path = os.path.join(model_direc, path)
@@ -108,17 +104,12 @@ class ModelPage_functionality(QtWidgets.QMainWindow, Ui_MainWindow):
         head, tail = ntpath.split(path)
         return tail or ntpath.basename(head)
 
-
     def on_click_listbox(self):
-
         file_list = self.walk_dir(self.model_direc)
-
         if self.listWidget.currentRow() not in self.index:
            self.index.append(self.listWidget.currentRow())
         elif self.listWidget.currentRow() in self.index:
             self.index.remove(self.listWidget.currentRow())
-
-
 
         if len(self.index) == 1:
             self.selpath = [file_list[self.index[0]]]
@@ -147,6 +138,7 @@ class ModelPage_functionality(QtWidgets.QMainWindow, Ui_MainWindow):
             error_dialog.showMessage("There was no RSA private key selected to decrypt the models. Please select and load one.")
             error_dialog.exec_()
         else:
+            # TODO use relative path of loaded encrypted key
             with open("/home/felix/PycharmProjects/train-user-client/backend/encr_sym_key", "rb") as encr_sym_key:
                 encr_key = encr_sym_key.read()
             sym_key = encryption_func.decrypt_symmetric_key(encr_key, self.pk)
@@ -158,7 +150,6 @@ class ModelPage_functionality(QtWidgets.QMainWindow, Ui_MainWindow):
 
             self.decryption_process = 1
 
-
     def show_decrypt_files(self):
         if self.decryption_process == 1:
             os.system('nautilus "/home/felix/PycharmProjects/train-user-client/backend"')
@@ -168,9 +159,9 @@ class ModelPage_functionality(QtWidgets.QMainWindow, Ui_MainWindow):
             error_dialog.showMessage("You havent decrypted any modelfiles yet, please select some in your chosen directory and decrypt them")
             error_dialog.exec_()
 
+
 if __name__ == "__main__":
-    import sys
     app = QtWidgets.QApplication(sys.argv)
-    nextGui = ModelPage_functionality()
+    nextGui = ModelPageFunctionality()
     nextGui.show()
     sys.exit(app.exec_())
