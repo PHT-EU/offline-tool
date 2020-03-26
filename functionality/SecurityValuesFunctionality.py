@@ -5,7 +5,7 @@ from visualisation.SecurityValues import Ui_MainWindow
 #import ModelPageFunctionality
 from functionality import encryption_func
 import main
-
+import sys
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives import hashes
 #from fbs_runtime.application_context.PyQt5 import ApplicationContext
@@ -39,7 +39,7 @@ class SecurityValuesFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
         if self.folder_path != "":
 
             key_name = QtWidgets.QInputDialog.getText(self, 'Generate private key', 'Enter a name for your private key:')
-            self.private_key_name = choosen_direc + '/' +  key_name[0]
+            self.private_key_name = choosen_direc + '/' + key_name[0]
             print(self.private_key_name)
 
             rsa_sk, rsa_pk = encryption_func.create_rsa_keys()
@@ -48,7 +48,6 @@ class SecurityValuesFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
 
         else:
             self.label.setText("You havent picked a valid directory")
-
 
     def pick_key_filepath(self):
         keyfile = QtWidgets.QFileDialog.getOpenFileName(self)
@@ -94,7 +93,6 @@ class SecurityValuesFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
 
 
 if __name__ == "__main__":
-    import sys
     app = QtWidgets.QApplication(sys.argv)
     app.setStyle('Fusion')
     nextGui = SecurityValuesFunctionality()
