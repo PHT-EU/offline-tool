@@ -1,6 +1,5 @@
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives.asymmetric import rsa, ec
-# EC used?
 from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.primitives.asymmetric import padding, utils
 from cryptography.hazmat.primitives import hashes
@@ -30,18 +29,22 @@ def create_rsa_keys():
     return private_key_pem, public_key_pem
 
 
-def store_keys(path, rsa_private_key_pem, name):
+def store_keys(path, rsa_private_key_pem,rsa_public_key_pem, name, name2):
     """
     Stores the given keys at the specified path
     :param path:
     :param rsa_private_key_pem:
-    :param name:
+    :param rsa_public_key_pem:
     :return:
     """
     print("Test store")
-    with open(os.path.join(path, name), "wb") as sk:
+    with open(os.path.join(path, name + ".pem"), "wb") as sk:
         sk.write(rsa_private_key_pem)
-        print("Wrote " + name + " to " + path)
+        print("Wrote " + name + " to " +  path)
+    with open(os.path.join(path, name2 + ".pem"), "wb") as pk:
+        pk.write(rsa_public_key_pem)
+        print("Wrote " + name2 + " to " +  path)
+
 
 
 def load_private_key(path):
@@ -59,14 +62,14 @@ def load_private_key(path):
     return private_key
 
 
-def sign_hash(private_key, hash_value):
+def sign_hash(private_key, hash):
     """
     Creates an ecc signature using the provided private key and hash
-    :param private_key: rsa private key
-    :param hash_value: hash as byte object
+    :param rsa: rsa private key
+    :param hash: hash as byte object
     :return: DER encoded byte object representing the signature
     """
-    signature = private_key.sign(hash_value,
+    signature = private_key.sign(hash,
                                  padding.PSS(
                                      mgf=padding.MGF1(hashes.SHA512()),
                                      salt_length=padding.PSS.MAX_LENGTH
@@ -101,16 +104,16 @@ def decrypt_models(models, sym_key):
     :return: list of decrypted models
     """
     decr_models = []
-    fer = Fernet(sym_key)
+    fernet = Fernet(sym_key)
     for model in models:
         with open(model, "rb") as mf:
-            decr_models.append(fer.decrypt(mf.read()))
+            decr_models.append(fernet.decrypt(mf.read()))
     return decr_models
 
 
 def hash_string(string):
-    hash_str = hashes.Hash(hashes.SHA512(), default_backend())
-    hash_str.update(string.encode())
-    return hash_str.finalize()
+    hasher = hashes.Hash(hashes.SHA512(), default_backend())
+    hasher.update(string.encode())
+    return hasher.finalize()
 
 

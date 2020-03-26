@@ -3,14 +3,13 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from collections import OrderedDict
 from visualisation.ModelPage import Ui_MainWindow
 from pathlib import Path
-# TODO keep your imports clean - only import used packages
 import os
 import main
 from functionality import encryption_func
 import ntpath
 import sys
 
-# TODO see PEP 8 checks - remove all hints / suggestions from all files
+# TODO see PEP 8 checks
 
 
 class ModelPageFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
@@ -83,20 +82,22 @@ class ModelPageFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
         for id in list(self.walklevel(self.model_direc, 1))[0][2]:
             self.direc_list.append(id)
 
-        direc_list = sorted(self.direc_list, key=str.lower)
-        print(direc_list)
+        self.direc_list = sorted(self.direc_list, key=str.lower)
+        print(self.direc_list)
 
         if self.model_direc != "":
             self.label.setText("Choosen directory:" + "\n" + "\n" + self.model_direc)
             print(self.model_direc)
 
-            for name in direc_list:
+            for name in self.direc_list:
                 self.listWidget.addItem(name)
 
-            self.listWidget.setSelectionMode(QtWidgets.QAbstractItemView.ExtendedSelection)
+            #self.listWidget.setSelectionMode(QtWidgets.QAbstractItemView.ExtendedSelection)
             self.listWidget.itemClicked.connect(self.on_click_listbox)
         else:
             self.label.setText("You havent picked a valid directory")
+
+
 
     def walk_dir(self, model_direc):
         # walks the specified directory root and returns a list of paths to these files
@@ -114,7 +115,6 @@ class ModelPageFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
                     file_list.append(full_path)
 
         file_list = sorted(file_list, key=str.lower)
-        print(file_list)
         return file_list
 
     def path_leaf(self, path):
@@ -143,7 +143,10 @@ class ModelPageFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
 
             self.label_5.setText(model_string)
 
+
+
     def decrypt_models(self):
+
         selected_models = self.selpath
 
         if self.pk is "":
@@ -152,7 +155,6 @@ class ModelPageFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
             error_dialog.showMessage("There was no RSA private key selected to decrypt the models. Please select and load one.")
             error_dialog.exec_()
         else:
-            # TODO should be the path of the selected temporary encr_sym_key and not hardcoded - see error
             with open("./functionality/encr_sym_key", "rb") as encr_sym_key:
                 encr_key = encr_sym_key.read()
             sym_key = encryption_func.decrypt_symmetric_key(encr_key, self.pk)
@@ -166,13 +168,13 @@ class ModelPageFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def show_decrypt_files(self):
         if self.decryption_process == 1:
-            # TODO absolute path?
             os.system('nautilus "/home/felix/PycharmProjects/train-user-client/backend"')
         else:
             error_dialog = QtWidgets.QErrorMessage()
             error_dialog.setWindowTitle("No Decryption")
             error_dialog.showMessage("You havent decrypted any modelfiles yet, please select some in your chosen directory and decrypt them")
             error_dialog.exec_()
+
 
 
 if __name__ == "__main__":
