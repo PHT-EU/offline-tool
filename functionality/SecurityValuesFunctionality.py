@@ -40,10 +40,30 @@ class SecurityValuesFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
         if self.folder_path != "":
 
             private_key_name = QtWidgets.QInputDialog.getText(self, 'Generate private key', 'Enter a name for your private key:')
-            self.private_key_name = choosen_direc + '/' +  private_key_name[0]
+
+            while private_key_name[0].isalnum() is False:
+                error_dialog = QtWidgets.QErrorMessage()
+                error_dialog.setWindowTitle("Unvalid private key name")
+                error_dialog.showMessage(
+                    "The name of your private key wasn´t valid. Please use only letters or numbers")
+                error_dialog.exec_()
+                private_key_name = QtWidgets.QInputDialog.getText(self, 'Generate private key',
+                                                                  'Enter a name for your private key:')
+            else:
+                self.private_key_name = choosen_direc + '/' + private_key_name[0]
 
             public_key_name = QtWidgets.QInputDialog.getText(self, 'Generate public key', 'Enter a name for your public key:')
-            self.public_key_name = choosen_direc + '/' + public_key_name[0]
+            while private_key_name[0].isalnum() is False:
+                error_dialog = QtWidgets.QErrorMessage()
+                error_dialog.setWindowTitle("Unvalid public key name")
+                error_dialog.showMessage(
+                    "The name of your public key wasn´t valid. Please use only letters or numbers")
+                error_dialog.exec_()
+                public_key_name = QtWidgets.QInputDialog.getText(self, 'Generate public key',
+                                                                 'Enter a name for your public key:')
+            else:
+                self.public_key_name = choosen_direc + '/' + public_key_name[0]
+
             print(self.public_key_name)
             print(self.private_key_name)
 
@@ -58,18 +78,19 @@ class SecurityValuesFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
     def pick_key_filepath(self):
         keyfile = QtWidgets.QFileDialog.getOpenFileName(self)
         self.key_filepath = keyfile[0]
+        pk = encryption_func.load_private_key(self.key_filepath)
 
-        if self.key_filepath.endswith('.pem'):
-            pk = encryption_func.load_private_key(self.key_filepath)
-            self.pk = pk
-            self.label_2.setText("Choosen private key got succesfully loaded and ready to use:" + "\n" + "\n" + self.key_filepath)
-        else:
+        if pk == "unvalid":
             self.label_2.setText("You havent picked a valid keyfile")
             error_dialog = QtWidgets.QErrorMessage()
             error_dialog.setWindowTitle("Unvalid private key")
             error_dialog.showMessage(
-                "The private key you selected wasn´t valid. Choose a file with the extension .pem")
+                "The private key you selected wasn´t valid. Choose a valid key or generate a new one")
             error_dialog.exec_()
+        else:
+            self.pk = pk
+            self.label_2.setText(
+                "Choosen private key got succesfully loaded and ready to use:" + "\n" + "\n" + self.key_filepath)
 
     def sign_hash_btn(self):
         hash_string = self.textEdit.toPlainText()

@@ -4,6 +4,8 @@ from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.primitives.asymmetric import padding, utils
 from cryptography.hazmat.primitives import hashes
 from cryptography.fernet import Fernet
+from PyQt5.Qt import QApplication, QClipboard
+from PyQt5 import QtCore, QtGui, QtWidgets
 import os
 
 
@@ -55,11 +57,16 @@ def load_private_key(path):
     """
     print(path)
     with open(path, "rb") as key:
-        private_key = serialization.load_pem_private_key(key.read(),
-                                                         password=None,
-                                                         backend=default_backend())
-    print("Key successfully loaded")
-    return private_key
+        try:
+            private_key = serialization.load_pem_private_key(key.read(),
+                                                             password=None,
+                                                             backend=default_backend())
+        except:
+            private_key = "unvalid"
+            return private_key
+        else:
+            print("Key successfully loaded")
+            return private_key
 
 
 def sign_hash(private_key, hash):
@@ -107,7 +114,12 @@ def decrypt_models(models, sym_key):
     fernet = Fernet(sym_key)
     for model in models:
         with open(model, "rb") as mf:
-            decr_models.append(fernet.decrypt(mf.read()))
+            token = mf.read()
+            print("model read")
+            fernet_decrypt = fernet.decrypt(token)
+            print("fernet decrypt")
+            decr_models.append(fernet_decrypt)
+            print("model appended")
     return decr_models
 
 

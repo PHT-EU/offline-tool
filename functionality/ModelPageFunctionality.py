@@ -19,7 +19,7 @@ class ModelPageFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
         self.encryp_key_path = ("", "")
         self.key_filepath2 = ""
         self.model_direc = ""
-        self.pk = ""
+        self.pk1 = None
         self.direc_list = []
         self.file_list = []
         self.selpath = []
@@ -29,7 +29,7 @@ class ModelPageFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
         self.pushButton_2.clicked.connect(self.select_encrypted_key)
         self.pushButton.clicked.connect(self.choose_modelfiles_direc)
         self.pushButton_4.clicked.connect(self.decrypt_models)
-        self.pushButton_3.clicked.connect(self.pick_key_filepath)
+        self.pushButton_3.clicked.connect(self.pick_key_filepath2)
         self.pushButton_6.clicked.connect(self.show_decrypt_files)
 
     def return_page(self):
@@ -47,17 +47,24 @@ class ModelPageFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
         else:
             self.label_2.setText("You haven't picked a valid keyfile")
 
-    def pick_key_filepath(self):
+
+    def pick_key_filepath2(self):
         keyfile2 = QtWidgets.QFileDialog.getOpenFileName(self)
         self.key_filepath2 = keyfile2[0]
-        print(keyfile2[0])
+        pk1 = encryption_func.load_private_key(self.key_filepath2)
 
-        if self.key_filepath2 != "":
-            pk = encryption_func.load_private_key(self.key_filepath2)
-            self.pk = pk
-            self.label_3.setText("Your selected private key loaded successfully")
+        if pk1 == "unvalid":
+            self.label_3.setText("You havent picked a valid keyfile")
+            error_dialog = QtWidgets.QErrorMessage()
+            error_dialog.setWindowTitle("Unvalid private key")
+            error_dialog.showMessage(
+                "The private key you selected wasn´t valid. Choose a valid key or generate a new one")
+            error_dialog.exec_()
         else:
-            self.label_3.setText("You haven't picked a valid keyfile")
+            self.pk1 = pk1
+            self.label_3.setText(
+                "Choosen private key got succesfully loaded and ready to use:" + "\n" + "\n" + self.key_filepath2)
+
 
 
     def walklevel(self, some_dir, level=1):
@@ -75,19 +82,19 @@ class ModelPageFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
         self.model_direc = choosen_direc
         self.direc_list = []
         self.listWidget.clear()
-        self.selpath = ""
+        self.selpath = []
         self.label_5.setText("No models selected" + "\n" + "\n" + "Please click on the file(s) to select them")
-        self.index = []
+        del self.index[:]
 
         for id in list(self.walklevel(self.model_direc, 1))[0][2]:
             self.direc_list.append(id)
 
         self.direc_list = sorted(self.direc_list, key=str.lower)
-        print(self.direc_list)
+        print("directory list", self.direc_list)
 
         if self.model_direc != "":
             self.label.setText("Choosen directory:" + "\n" + "\n" + self.model_direc)
-            print(self.model_direc)
+            print("model direc list", self.model_direc)
 
             for name in self.direc_list:
                 self.listWidget.addItem(name)
@@ -122,20 +129,25 @@ class ModelPageFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
         return tail or ntpath.basename(head)
 
     def on_click_listbox(self):
+        print("index list1",self.index)
         self.file_list = self.walk_dir(self.model_direc)
         if self.listWidget.currentRow() not in self.index:
            self.index.append(self.listWidget.currentRow())
         elif self.listWidget.currentRow() in self.index:
             self.index.remove(self.listWidget.currentRow())
 
-        if len(self.index) == 1:
+        print("index list2", self.index)
+
+        '''if len(self.index) == 1:
             self.selpath = [self.file_list[self.index[0]]]
+            print(self.selpath)
             path = self.path_leaf(self.selpath[0])
-            self.label_5.setText("Selected models:" + "\n" + "\n" + path)
-        elif len(self.index) == 0:
-            self.label_5.setText("No models selected" + "\n" + "\n" + "Please click on the file(s) to select them")
+            self.label_5.setText("Selected models:" + "\n" + "\n" + path)'''
+        if len(self.index) == 0:
+            self.label_5.setText("No models selected" + "\n" + "\n" + "Please click on the file(s) to select/deselect them")
         else:
             self.selpath = [self.file_list[x] for x in self.index]
+            print("selpath", self.selpath)
             model_string = "Selected models:"
             for path in self.selpath:
                 path = self.path_leaf(path)
@@ -149,21 +161,25 @@ class ModelPageFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
 
         selected_models = self.selpath
 
-        if self.pk is "":
+        if self.pk1 is None:
             error_dialog = QtWidgets.QErrorMessage()
             error_dialog.setWindowTitle("Missing Private Key")
             error_dialog.showMessage("There was no RSA private key selected to decrypt the models. Please select and load one.")
             error_dialog.exec_()
         else:
-            with open("./functionality/encr_sym_key", "rb") as encr_sym_key:
+            with open(self.encryp_key_path, "rb") as encr_sym_key:
+                print("sym key opened")
                 encr_key = encr_sym_key.read()
-            sym_key = encryption_func.decrypt_symmetric_key(encr_key, self.pk)
+                print("sym key read")
+            sym_key = encryption_func.decrypt_symmetric_key(encr_key, self.pk1)
+            print("sym key decrypt")
             decrypted_models = encryption_func.decrypt_models(selected_models, sym_key)
+            print("models decrypt")
 
             for i in range(len(selected_models)):
                 with open(selected_models[i], "rb") as decr_model:
                     decr_model.write(decrypted_models[i])
-
+            print("model written")
             self.decryption_process = 1
 
     def show_decrypt_files(self):
