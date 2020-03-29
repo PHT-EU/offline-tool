@@ -42,7 +42,7 @@ class ModelPageFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
         self.encryp_key_path = keyfile1[0]
 
         if self.encryp_key_path != "":
-            self.label_2.setText("Encrypted symmetric key successfully chosen")
+            self.label_2.setText("Chosen encrypted symmetric key got successfully loaded:" + "\n" + "\n" + self.encryp_key_path)
             print(self.encryp_key_path)
         else:
             self.label_2.setText("You haven't picked a valid keyfile")
@@ -63,7 +63,7 @@ class ModelPageFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
         else:
             self.pk1 = pk1
             self.label_3.setText(
-                "Choosen private key got succesfully loaded and ready to use:" + "\n" + "\n" + self.key_filepath2)
+                "Chosen private key got succesfully loaded and ready to use:" + "\n" + "\n" + self.key_filepath2)
 
 
 
@@ -168,23 +168,20 @@ class ModelPageFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
             error_dialog.exec_()
         else:
             with open(self.encryp_key_path, "rb") as encr_sym_key:
-                print("sym key opened")
                 encr_key = encr_sym_key.read()
-                print("sym key read")
+
             sym_key = encryption_func.decrypt_symmetric_key(encr_key, self.pk1)
-            print("sym key decrypt")
             decrypted_models = encryption_func.decrypt_models(selected_models, sym_key)
-            print("models decrypt")
 
             for i in range(len(selected_models)):
                 with open(selected_models[i], "w") as decr_model:
                     decr_model.write(str(decrypted_models[i]))
-            print("model written")
             self.decryption_process = 1
+            self.label_5.setText("Selected models have been succesfully decrypted ")
 
     def show_decrypt_files(self):
         if self.decryption_process == 1:
-            os.system('nautilus "/home/felix/PycharmProjects/train-user-client/backend"')
+            os.system('explorer "C:/Users/fboet/PycharmProjects/pht-offline-tool/test_data"')
         else:
             error_dialog = QtWidgets.QErrorMessage()
             error_dialog.setWindowTitle("No Decryption")

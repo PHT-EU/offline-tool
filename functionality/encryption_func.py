@@ -115,11 +115,8 @@ def decrypt_models(models, sym_key):
     for model in models:
         with open(model, "rb") as mf:
             token = mf.read()
-            print("model read")
             fernet_decrypt = fernet.decrypt(token)
-            print("fernet decrypt")
             decr_models.append(fernet_decrypt)
-            print("model appended")
     return decr_models
 
 
