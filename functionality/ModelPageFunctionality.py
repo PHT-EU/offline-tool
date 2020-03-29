@@ -177,8 +177,8 @@ class ModelPageFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
             print("models decrypt")
 
             for i in range(len(selected_models)):
-                with open(selected_models[i], "rb") as decr_model:
-                    decr_model.write(decrypted_models[i])
+                with open(selected_models[i], "w") as decr_model:
+                    decr_model.write(str(decrypted_models[i]))
             print("model written")
             self.decryption_process = 1
 

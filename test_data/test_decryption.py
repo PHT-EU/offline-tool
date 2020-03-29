@@ -22,10 +22,15 @@ class test_decryption():
         print("symkey decrypted")
 
         model = [''"C:/Users/fboet/PycharmProjects/pht-offline-tool/test_data/model1"'']
-        print(model)
+        print(model[0])
         decrypted_model = encryption_func.decrypt_models(model, decry_sym_key)
+        print(len(decrypted_model))
         print("model decrypted")
 
+        with open(model[0], "w") as decr_model:
+            decr_model.write(str(decrypted_model[0]))
+
+        print("model updated")
 
 
 
