@@ -49,7 +49,8 @@ class ModelPageFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
     def pick_key_filepath2(self):
         file_dialog = QtWidgets.QFileDialog(self)
         file_dialog.setNameFilter("pem(*_sk.pem)")
-        keyfile2 = file_dialog.exec_()
+        keyfile2 = file_dialog.getOpenFileName()
+        print(keyfile2)
 
         #keyfile2 = QtWidgets.QFileDialog.getOpenFileName(self, filter)
         self.key_filepath2 = keyfile2[0]
