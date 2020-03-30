@@ -40,10 +40,10 @@ def store_keys(path, rsa_private_key_pem,rsa_public_key_pem, name, name2):
     :return:
     """
     print("Test store")
-    with open(os.path.join(path, name + ".pem"), "wb") as sk:
+    with open(os.path.join(path, name + "_sk.pem"), "wb") as sk:
         sk.write(rsa_private_key_pem)
         print("Wrote " + name + " to " +  path)
-    with open(os.path.join(path, name2 + ".pem"), "wb") as pk:
+    with open(os.path.join(path, name2 + "_pk.pem"), "wb") as pk:
         pk.write(rsa_public_key_pem)
         print("Wrote " + name2 + " to " +  path)
 
@@ -92,6 +92,7 @@ def decrypt_symmetric_key(encrypted_sym_key, private_key):
     :param private_key:
     :return:
     """
+
     decrypted_key = private_key.decrypt(
         encrypted_sym_key,
         padding=padding.OAEP(

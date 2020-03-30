@@ -47,7 +47,7 @@ if __name__ == '__main__':
         key = sk_f.read()
 
     with open("encr_sym_key", "wb") as enc_sym_key:
-        with open("C:/Users/fboet/PycharmProjects/pht-offline-tool/test_data/rsa_public_key", "rb") as rsa_key:
+        with open("/home/felix/PycharmProjects/pht-offline-tool/test_data/rsa_public_key", "rb") as rsa_key:
             rsa_pub_key = serialization.load_pem_public_key(rsa_key.read(), default_backend())
         encr_key = create_encrypted_sym_key(rsa_pub_key, key)
         enc_sym_key.write(encr_key)

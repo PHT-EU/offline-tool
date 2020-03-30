@@ -3,7 +3,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from visualisation.ChoosePage import Ui_MainWindow
 from functionality import ModelPageFunctionality
 from functionality.SecurityValuesFunctionality import SecurityValuesFunctionality
-import sys
+import sys, platform
 
 
 class ChoosePageFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
@@ -40,7 +40,10 @@ class ChoosePageFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
-    app.setStyle('Fusion')
+    if platform.system() == "Windows" or platform.system() == "Darwin":
+        app.setStyle('Fusion')
+    else:
+        None
     nextGui = ChoosePageFunctionality()
     nextGui.show()
     sys.exit(app.exec_())

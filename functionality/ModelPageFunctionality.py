@@ -3,11 +3,9 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from collections import OrderedDict
 from visualisation.ModelPage import Ui_MainWindow
 from pathlib import Path
-import os
-import main
 from functionality import encryption_func
-import ntpath
-import sys
+import sys, platform, subprocess, ntpath, main, os
+
 
 # TODO see PEP 8 checks
 
@@ -49,7 +47,11 @@ class ModelPageFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
 
 
     def pick_key_filepath2(self):
-        keyfile2 = QtWidgets.QFileDialog.getOpenFileName(self)
+        file_dialog = QtWidgets.QFileDialog(self)
+        file_dialog.setNameFilter("pem(*_sk.pem)")
+        keyfile2 = file_dialog.exec_()
+
+        #keyfile2 = QtWidgets.QFileDialog.getOpenFileName(self, filter)
         self.key_filepath2 = keyfile2[0]
         pk1 = encryption_func.load_private_key(self.key_filepath2)
 
@@ -86,8 +88,11 @@ class ModelPageFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
         self.label_5.setText("No models selected" + "\n" + "\n" + "Please click on the file(s) to select them")
         del self.index[:]
 
-        for id in list(self.walklevel(self.model_direc, 1))[0][2]:
-            self.direc_list.append(id)
+        if self.model_direc == "":
+            self.label.setText("No directory chosen yet")
+        else:
+            for id in list(self.walklevel(self.model_direc, 1))[0][2]:
+                self.direc_list.append(id)
 
         self.direc_list = sorted(self.direc_list, key=str.lower)
         print("directory list", self.direc_list)
@@ -169,19 +174,45 @@ class ModelPageFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
         else:
             with open(self.encryp_key_path, "rb") as encr_sym_key:
                 encr_key = encr_sym_key.read()
+            print("sym key read")
+            try:
+                sym_key = encryption_func.decrypt_symmetric_key(encr_key, self.pk1)
+                print("sym key decrypted")
+            except:
+                error_dialog = QtWidgets.QErrorMessage()
+                error_dialog.setWindowTitle("Wrong private key selected")
+                error_dialog.showMessage(
+                    "You haven't chosen the matching private key for the encrypted models")
+                error_dialog.exec_()
+            else:
+                try:
+                    decrypted_models = encryption_func.decrypt_models(selected_models, sym_key)
+                except:
+                    error_dialog = QtWidgets.QErrorMessage()
+                    error_dialog.setWindowTitle("Wrong symmetric key selected")
+                    error_dialog.showMessage(
+                        "You haven't chosen the matching symmetric key for the encrypted models")
+                    error_dialog.exec_()
+                else:
 
-            sym_key = encryption_func.decrypt_symmetric_key(encr_key, self.pk1)
-            decrypted_models = encryption_func.decrypt_models(selected_models, sym_key)
+                    print("models decrypted")
 
-            for i in range(len(selected_models)):
-                with open(selected_models[i], "w") as decr_model:
-                    decr_model.write(str(decrypted_models[i]))
-            self.decryption_process = 1
-            self.label_5.setText("Selected models have been succesfully decrypted ")
+                    for i in range(len(selected_models)):
+                        with open(selected_models[i], "w") as decr_model:
+                            decr_model.write(str(decrypted_models[i]))
+                    self.decryption_process = 1
+                    self.label_5.setText("Selected models have been succesfully decrypted ")
 
     def show_decrypt_files(self):
         if self.decryption_process == 1:
-            os.system('explorer "C:/Users/fboet/PycharmProjects/pht-offline-tool/test_data"')
+
+            if platform.system() == "Windows":
+                os.startfile(self.model_direc)
+            elif platform.system() == "Darwin":
+                subprocess.Popen(["open", self.model_direc])
+            else:
+                subprocess.Popen(["xdg-open", self.model_direc])
+
         else:
             error_dialog = QtWidgets.QErrorMessage()
             error_dialog.setWindowTitle("No Decryption")
@@ -192,7 +223,10 @@ class ModelPageFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
-    app.setStyle('Fusion')
+    if platform.system() == "Windows" or platform.system() == "Darwin":
+        app.setStyle('Fusion')
+    else:
+        None
     nextGui = ModelPageFunctionality()
     nextGui.show()
     sys.exit(app.exec_())

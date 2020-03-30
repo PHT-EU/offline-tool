@@ -114,7 +114,7 @@ class Ui_MainWindow(object):
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "PHT offline tool"))
-        self.pushButton.setText(_translate("MainWindow", "Generate private key"))
+        self.pushButton.setText(_translate("MainWindow", "Generate private and public key"))
         self.label.setText(_translate("MainWindow", "No keys generated yet" + "\n" + "\n" + "No path choosen yet"))
         self.label_2.setText(_translate("MainWindow", "Havent choosen a private key yet"))
         self.pushButton_2.setText(_translate("MainWindow", "Pick and load private key"))

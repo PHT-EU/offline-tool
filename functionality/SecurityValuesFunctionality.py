@@ -4,7 +4,8 @@ from PyQt5.Qt import QApplication, QClipboard
 from visualisation.SecurityValues import Ui_MainWindow
 #import ModelPageFunctionality
 from functionality import encryption_func
-import main
+import main, platform
+import re
 
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives import hashes
@@ -41,7 +42,9 @@ class SecurityValuesFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
 
             private_key_name = QtWidgets.QInputDialog.getText(self, 'Generate private key', 'Enter a name for your private key:')
 
-            while private_key_name[0].isalnum() is False:
+            #re.match(r'^[A-Za-z0-9_]+$', private_key_name[0])
+            #private_key_name[0].isalnum()
+            while re.match(r'^[A-Za-z0-9_]+$', private_key_name[0]) is False:
                 error_dialog = QtWidgets.QErrorMessage()
                 error_dialog.setWindowTitle("Unvalid private key name")
                 error_dialog.showMessage(
@@ -53,7 +56,7 @@ class SecurityValuesFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
                 self.private_key_name = choosen_direc + '/' + private_key_name[0]
 
             public_key_name = QtWidgets.QInputDialog.getText(self, 'Generate public key', 'Enter a name for your public key:')
-            while private_key_name[0].isalnum() is False:
+            while re.match(r'^[A-Za-z0-9_]+$', public_key_name[0]) is False:
                 error_dialog = QtWidgets.QErrorMessage()
                 error_dialog.setWindowTitle("Unvalid public key name")
                 error_dialog.showMessage(
@@ -76,7 +79,9 @@ class SecurityValuesFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
 
 
     def pick_key_filepath(self):
-        keyfile = QtWidgets.QFileDialog.getOpenFileName(self)
+        file_dialog = QtWidgets.QFileDialog(self)
+        file_dialog.setNameFilter("pem(*_sk.pem)")
+        keyfile = file_dialog.exec_()
         self.key_filepath = keyfile[0]
         pk = encryption_func.load_private_key(self.key_filepath)
 
@@ -121,7 +126,10 @@ class SecurityValuesFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
-    app.setStyle('Fusion')
+    if platform.system() == "Windows" or platform.system() == "Darwin":
+        app.setStyle('Fusion')
+    else:
+        None
     nextGui = SecurityValuesFunctionality()
     nextGui.show()
     sys.exit(app.exec_())
