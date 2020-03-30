@@ -48,11 +48,7 @@ class ModelPageFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def pick_key_filepath2(self):
         file_dialog = QtWidgets.QFileDialog(self)
-        file_dialog.setNameFilter("pem(*_sk.pem)")
-        keyfile2 = file_dialog.getOpenFileName()
-        print(keyfile2)
-
-        #keyfile2 = QtWidgets.QFileDialog.getOpenFileName(self, filter)
+        keyfile2 = file_dialog.getOpenFileName(None, "Window Name", "", "pem(*_sk.pem)")
         self.key_filepath2 = keyfile2[0]
         pk1 = encryption_func.load_private_key(self.key_filepath2)
 
