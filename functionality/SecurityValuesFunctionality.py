@@ -86,7 +86,7 @@ class SecurityValuesFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
         try:
             pk = encryption_func.load_private_key(self.key_filepath)
         except:
-            self.label_3.setText("You havent picked a keyfile yet")
+            self.label_2.setText("You havent picked a keyfile yet")
         else:
             if pk == "unvalid":
                 self.label_2.setText("You havent picked a valid keyfile")

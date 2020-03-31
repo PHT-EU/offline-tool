@@ -22,6 +22,7 @@ class ModelPageFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
         self.file_list = []
         self.selpath = []
         self.index = []
+        self.counter = 0
         self.decryption_process = 0
         self.pushButton_5.clicked.connect(self.return_page)
         self.pushButton_2.clicked.connect(self.select_encrypted_key)
@@ -87,6 +88,7 @@ class ModelPageFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
         self.direc_list = []
         self.listWidget.clear()
         self.selpath = []
+        self.counter += 1
         self.label_5.setText("No models selected" + "\n" + "\n" + "Please click on the file(s) to select them")
         del self.index[:]
 
@@ -106,8 +108,10 @@ class ModelPageFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
             for name in self.direc_list:
                 self.listWidget.addItem(name)
 
-            #self.listWidget.setSelectionMode(QtWidgets.QAbstractItemView.ExtendedSelection)
-            self.listWidget.itemClicked.connect(self.on_click_listbox)
+            if self.counter == 1:
+                self.listWidget.itemClicked.connect(self.on_click_listbox)
+            else:
+                None
         else:
             self.label.setText("You havent picked a valid directory")
 
