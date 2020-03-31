@@ -165,7 +165,7 @@ class Ui_MainWindow(object):
         self.pushButton.setText(_translate("MainWindow", "Choose model files directory"))
         self.label.setText(_translate("MainWindow", "No directory chosen yet"))
         self.label_4.setText(_translate("MainWindow", "List of Modelfiles"))
-        self.label_5.setText(_translate("MainWindow", "No models selected yet"))
+        self.label_5.setText(_translate("MainWindow", "No models selected yet."))
         self.pushButton_4.setText(_translate("MainWindow", "Decrypt selected models"))
         self.pushButton_6.setText(_translate("MainWindow", "Show decrypted files"))
         self.pushButton_5.setText(_translate("MainWindow", "Return "))

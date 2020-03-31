@@ -82,19 +82,23 @@ class SecurityValuesFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
         file_dialog = QtWidgets.QFileDialog(self)
         keyfile = file_dialog.getOpenFileName(None, "Window Name", "", "pem(*_sk.pem)")
         self.key_filepath = keyfile[0]
-        pk = encryption_func.load_private_key(self.key_filepath)
 
-        if pk == "unvalid":
-            self.label_2.setText("You havent picked a valid keyfile")
-            error_dialog = QtWidgets.QErrorMessage()
-            error_dialog.setWindowTitle("Unvalid private key")
-            error_dialog.showMessage(
-                "The private key you selected wasn´t valid. Choose a valid key or generate a new one")
-            error_dialog.exec_()
+        try:
+            pk = encryption_func.load_private_key(self.key_filepath)
+        except:
+            self.label_3.setText("You havent picked a keyfile yet")
         else:
-            self.pk = pk
-            self.label_2.setText(
-                "Choosen private key got succesfully loaded and ready to use:" + "\n" + "\n" + self.key_filepath)
+            if pk == "unvalid":
+                self.label_2.setText("You havent picked a valid keyfile")
+                error_dialog = QtWidgets.QErrorMessage()
+                error_dialog.setWindowTitle("Unvalid private key")
+                error_dialog.showMessage(
+                    "The private key you selected wasn´t valid. Choose a valid key or generate a new one")
+                error_dialog.exec_()
+            else:
+                self.pk = pk
+                self.label_2.setText(
+                    "Choosen private key got succesfully loaded and ready to use:" + "\n" + "\n" + self.key_filepath)
 
     def sign_hash_btn(self):
         hash_string = self.textEdit.toPlainText()

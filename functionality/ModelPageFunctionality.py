@@ -50,19 +50,24 @@ class ModelPageFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
         file_dialog = QtWidgets.QFileDialog(self)
         keyfile2 = file_dialog.getOpenFileName(None, "Window Name", "", "pem(*_sk.pem)")
         self.key_filepath2 = keyfile2[0]
-        pk1 = encryption_func.load_private_key(self.key_filepath2)
 
-        if pk1 == "unvalid":
-            self.label_3.setText("You havent picked a valid keyfile")
-            error_dialog = QtWidgets.QErrorMessage()
-            error_dialog.setWindowTitle("Unvalid private key")
-            error_dialog.showMessage(
-                "The private key you selected wasn´t valid. Choose a valid key or generate a new one")
-            error_dialog.exec_()
+        try:
+            pk1 = encryption_func.load_private_key(self.key_filepath2)
+        except:
+            self.label_3.setText("You havent picked a keyfile yet")
         else:
-            self.pk1 = pk1
-            self.label_3.setText(
-                "Chosen private key got succesfully loaded and ready to use:" + "\n" + "\n" + self.key_filepath2)
+
+            if pk1 == "unvalid":
+                self.label_3.setText("You havent picked a valid keyfile")
+                error_dialog = QtWidgets.QErrorMessage()
+                error_dialog.setWindowTitle("Unvalid private key")
+                error_dialog.showMessage(
+                    "The private key you selected wasn´t valid. Choose a valid key or generate a new one")
+                error_dialog.exec_()
+            else:
+                self.pk1 = pk1
+                self.label_3.setText(
+                    "Chosen private key got succesfully loaded and ready to use:" + "\n" + "\n" + self.key_filepath2)
 
 
 
@@ -169,36 +174,44 @@ class ModelPageFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
             error_dialog.showMessage("There was no RSA private key selected to decrypt the models. Please select and load one.")
             error_dialog.exec_()
         else:
-            with open(self.encryp_key_path, "rb") as encr_sym_key:
-                encr_key = encr_sym_key.read()
-            print("sym key read")
             try:
-                sym_key = encryption_func.decrypt_symmetric_key(encr_key, self.pk1)
-                print("sym key decrypted")
+                with open(self.encryp_key_path, "rb") as encr_sym_key:
+                    encr_key = encr_sym_key.read()
+                    print("sym key read")
             except:
                 error_dialog = QtWidgets.QErrorMessage()
-                error_dialog.setWindowTitle("Wrong private key selected")
+                error_dialog.setWindowTitle("No symmetric key selected yet")
                 error_dialog.showMessage(
-                    "You haven't chosen the matching private key for the encrypted models")
+                    "You haven't chosen a symmetric key. Please pick one above")
                 error_dialog.exec_()
             else:
                 try:
-                    decrypted_models = encryption_func.decrypt_models(selected_models, sym_key)
+                    sym_key = encryption_func.decrypt_symmetric_key(encr_key, self.pk1)
+                    print("sym key decrypted")
                 except:
                     error_dialog = QtWidgets.QErrorMessage()
-                    error_dialog.setWindowTitle("Wrong symmetric key selected")
+                    error_dialog.setWindowTitle("Wrong private key selected")
                     error_dialog.showMessage(
-                        "You haven't chosen the matching symmetric key for the encrypted models")
+                        "You haven't chosen the matching private key for the encrypted models")
                     error_dialog.exec_()
                 else:
+                    try:
+                        decrypted_models = encryption_func.decrypt_models(selected_models, sym_key)
+                    except:
+                        error_dialog = QtWidgets.QErrorMessage()
+                        error_dialog.setWindowTitle("Wrong symmetric key selected")
+                        error_dialog.showMessage(
+                            "You haven't chosen the matching symmetric key for the encrypted models")
+                        error_dialog.exec_()
+                    else:
 
-                    print("models decrypted")
+                        print("models decrypted")
 
-                    for i in range(len(selected_models)):
-                        with open(selected_models[i], "w") as decr_model:
-                            decr_model.write(str(decrypted_models[i]))
-                    self.decryption_process = 1
-                    self.label_5.setText("Selected models have been succesfully decrypted ")
+                        for i in range(len(selected_models)):
+                            with open(selected_models[i], "w") as decr_model:
+                                decr_model.write(str(decrypted_models[i]))
+                        self.decryption_process = 1
+                        self.label_5.setText("Selected models have been succesfully decrypted ")
 
     def show_decrypt_files(self):
         if self.decryption_process == 1:
