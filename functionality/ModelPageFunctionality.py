@@ -100,8 +100,9 @@ class ModelPageFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
         print("directory list", self.direc_list)
 
         if self.model_direc != "":
+
             self.label.setText("Choosen directory:" + "\n" + "\n" + self.model_direc)
-            print("model direc list", self.model_direc)
+            self.label_6.setText("Please click one the files to select them")
 
             for name in self.direc_list:
                 self.listWidget.addItem(name)
