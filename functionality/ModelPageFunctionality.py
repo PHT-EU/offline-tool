@@ -7,8 +7,6 @@ from functionality import encryption_func
 import sys, platform, subprocess, ntpath, main, os
 
 
-# TODO see PEP 8 checks
-
 
 class ModelPageFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
     def __init__(self, parent=None):
@@ -122,7 +120,6 @@ class ModelPageFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
         file_list = []
         towalk = [model_direc]
         while towalk:
-            # TODO not used yet ;)
             root_dir = towalk.pop()
             for path in os.listdir(model_direc):
                 if os.path.isdir(os.path.join(model_direc, path)):
