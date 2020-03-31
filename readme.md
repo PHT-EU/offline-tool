@@ -19,12 +19,6 @@ main.py
 ```
 from there on you can maneuver yourself through the different parts of the application. 
 
-&nbsp;
-
-To select your own encrypted symmetric key for decrypting your model files place it into this directory:
-```
-Pht-offline-tool/functionality/encr_sym_key
-```
 
 ## Using Test-data
 
@@ -35,13 +29,16 @@ Pht-offline-tool/test_data/test.py
 ```
 
 This script will generate you three example models and an encrypted symmetric key that you will need to decrypt these models.
-In order to decrypt the test data successfully you need to load the private and encrypted symmetric key, which are stored in the same directory, into the application:
+In order to decrypt the test data successfully you need to load the private and encrypted symmetric key into the application. 
+Both keys are stored in the same directory:
 
  ```
 Pht-offline-tool/test_data/rsa_private_key
+
+Pht-offline-tool/test_data/encr_sym_key
 ```
 
-You will find the neccessary steps on the ModelPage of the application.
+You will find the neccessary functions for key-loading on the ModelPage of the application.
 
 ## Create standalone application
 

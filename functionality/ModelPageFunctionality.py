@@ -146,11 +146,6 @@ class ModelPageFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
 
         print("index list2", self.index)
 
-        '''if len(self.index) == 1:
-            self.selpath = [self.file_list[self.index[0]]]
-            print(self.selpath)
-            path = self.path_leaf(self.selpath[0])
-            self.label_5.setText("Selected models:" + "\n" + "\n" + path)'''
         if len(self.index) == 0:
             self.label_5.setText("No models selected" + "\n" + "\n" + "Please click on the file(s) to select/deselect them")
         else:
