@@ -83,7 +83,7 @@ class Ui_MainWindow(object):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "PHT offline tool"))
         self.pushButton.setText(_translate("MainWindow", "Security Values"))
-        self.label_2.setText(_translate("MainWindow", "Choose your model files and decrypt them using private and encrypted symmetric key"))
+        self.label_2.setText(_translate("MainWindow", "Choose your model files and decrypt these using private and encrypted symmetric key"))
         self.pushButton_2.setText(_translate("MainWindow", "Model Page"))
         self.label.setText(_translate("MainWindow", "Generate your private and public keys aswell as hash signing for submitting valid trains"))
         self.label_4.setText(_translate("MainWindow", "<a href=\"https://pht.difuture.de\"><font color=black>pht.difuture.de</font></a>"))

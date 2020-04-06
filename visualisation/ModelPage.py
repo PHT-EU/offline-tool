@@ -167,18 +167,19 @@ class Ui_MainWindow(object):
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "PHT offline tool"))
-        self.pushButton.setText(_translate("MainWindow", "Choose model files directory"))
-        self.label.setText(_translate("MainWindow", "No directory chosen yet"))
+        self.pushButton.setText(_translate("MainWindow", "Select model files directory"))
+        self.label.setText(_translate("MainWindow", "No directory selected yet"))
         self.label_4.setText(_translate("MainWindow", "List of Modelfiles"))
         self.label_6.setText(_translate("MainWindow", "Select the model directory first"))
-        self.label_5.setText(_translate("MainWindow", "No models selected yet"))
+        self.label_5.setText(_translate("MainWindow", "No model files selected yet"))
         self.pushButton_4.setText(_translate("MainWindow", "Decrypt selected models"))
         self.pushButton_6.setText(_translate("MainWindow", "Show decrypted files"))
         self.pushButton_5.setText(_translate("MainWindow", "Return "))
-        self.label_2.setText(_translate("MainWindow", "No key selected yet"))
-        self.pushButton_3.setText(_translate("MainWindow", "Pick and load private key"))
-        self.pushButton_2.setText(_translate("MainWindow", "Select encrypted Symmetric key"))
+        self.label_2.setText(_translate("MainWindow", "No key file selected"))
+        self.pushButton_3.setText(_translate("MainWindow", "Select private key"))
+        self.pushButton_2.setText(_translate("MainWindow", "Select encrypted symmetric key"))
         self.label_3.setText(_translate("MainWindow", "No private key selected yet"))
+
 
 if __name__ == "__main__":
     import sys

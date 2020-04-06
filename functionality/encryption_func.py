@@ -42,11 +42,10 @@ def store_keys(path, rsa_private_key_pem,rsa_public_key_pem, name):
     print("Test store")
     with open(os.path.join(path, name + "_sk.pem"), "wb") as sk:
         sk.write(rsa_private_key_pem)
-        print("Wrote " + name + " to " +  path)
+        print("Wrote " + name + " to " + path)
     with open(os.path.join(path, name + "_pk.pem"), "wb") as pk:
         pk.write(rsa_public_key_pem)
-        print("Wrote " + name + " to " +  path)
-
+        print("Wrote " + name + " to " + path)
 
 
 def load_private_key(path):
@@ -62,7 +61,7 @@ def load_private_key(path):
                                                              password=None,
                                                              backend=default_backend())
         except:
-            private_key = "unvalid"
+            private_key = "invalid"
             return private_key
         else:
             print("Key successfully loaded")

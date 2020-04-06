@@ -119,14 +119,14 @@ class Ui_MainWindow(object):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "PHT offline tool"))
         self.pushButton.setText(_translate("MainWindow", "Generate private and public key"))
-        self.label.setText(_translate("MainWindow", "No keys generated yet" + "\n" + "\n" + "No path choosen yet"))
-        self.label_2.setText(_translate("MainWindow", "Havent choosen a private key yet"))
-        self.pushButton_2.setText(_translate("MainWindow", "Pick and load private key"))
+        self.label.setText(_translate("MainWindow", "No keys generated yet" + "\n" + "\n" + "No path selected yet"))
+        self.label_2.setText(_translate("MainWindow", "Select a valid private key"))
+        self.pushButton_2.setText(_translate("MainWindow", "Select private key"))
         self.pushButton_3.setText(_translate("MainWindow", "Sign"))
         self.pushButton_5.setText(_translate("MainWindow", "Return"))
         self.pushButton_4.setText(_translate("MainWindow", "Copy"))
         self.label_4.setText(_translate("MainWindow", "Signature"))
-        self.label_3.setText(_translate("MainWindow", "Copy your hash in here"))
+        self.label_3.setText(_translate("MainWindow", "Paste your hash below:"))
         self.label_5.setText(_translate("MainWindow", "No hash signed yet"))
 
 
