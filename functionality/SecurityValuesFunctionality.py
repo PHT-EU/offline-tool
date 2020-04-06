@@ -40,38 +40,27 @@ class SecurityValuesFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
 
         if self.folder_path != "":
 
-            private_key_name = QtWidgets.QInputDialog.getText(self, 'Generate private key', 'Enter a name for your private key:')
+            private_key_name = QtWidgets.QInputDialog.getText(self, 'Generate private/public key', 'Enter a name for your private/public key:')
 
-            #re.match(r'^[A-Za-z0-9_]+$', private_key_name[0])
-            #private_key_name[0].isalnum()
+
             while re.match(r'^[A-Za-z0-9_]+$', private_key_name[0]) is False:
                 error_dialog = QtWidgets.QErrorMessage()
-                error_dialog.setWindowTitle("Unvalid private key name")
+                error_dialog.setWindowTitle("Unvalid key name")
                 error_dialog.showMessage(
-                    "The name of your private key wasn´t valid. Please use only letters or numbers")
+                    "The name of your key wasn´t valid. Please use only letters or numbers")
                 error_dialog.exec_()
-                private_key_name = QtWidgets.QInputDialog.getText(self, 'Generate private key',
-                                                                  'Enter a name for your private key:')
+                private_key_name = QtWidgets.QInputDialog.getText(self, 'Generate private/public key',
+                                                                  'Enter a name for your private/public key:')
             else:
                 self.private_key_name = choosen_direc + '/' + private_key_name[0]
+                self.public_key_name = choosen_direc + '/' + private_key_name[0]
+                print(self.public_key_name + "_pk.pem")
+                print(self.private_key_name + "_sk.pem")
 
-            public_key_name = QtWidgets.QInputDialog.getText(self, 'Generate public key', 'Enter a name for your public key:')
-            while re.match(r'^[A-Za-z0-9_]+$', public_key_name[0]) is False:
-                error_dialog = QtWidgets.QErrorMessage()
-                error_dialog.setWindowTitle("Unvalid public key name")
-                error_dialog.showMessage(
-                    "The name of your public key wasn´t valid. Please use only letters or numbers")
-                error_dialog.exec_()
-                public_key_name = QtWidgets.QInputDialog.getText(self, 'Generate public key',
-                                                                 'Enter a name for your public key:')
-            else:
-                self.public_key_name = choosen_direc + '/' + public_key_name[0]
 
-            print(self.public_key_name)
-            print(self.private_key_name)
 
             rsa_sk, rsa_pk = encryption_func.create_rsa_keys()
-            encryption_func.store_keys(self.folder_path, rsa_sk, rsa_pk,  private_key_name[0], public_key_name[0])
+            encryption_func.store_keys(self.folder_path, rsa_sk, rsa_pk,  private_key_name[0])
             self.label.setText("Keys got successfully generated to:" + "\n" + "\n" + choosen_direc)
 
         else:
