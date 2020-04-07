@@ -7,6 +7,8 @@ class test_decryption():
         self.model = open("./test_data/model")
         self.private_key = open("./test_data/rsa_private_key", )
         self.public_key = open("./test_data/rsa_public_key")'''
+        print(len(
+            "cfb57759d4a1fc224584c3259595017d25beb3700afc04562f3a60047b725908932eedafe52632063dc7a01c3d0c7867c85c13979a9b5bce851af6e04445e538"))
         self.decrypt_models()
 
 
@@ -31,6 +33,8 @@ class test_decryption():
             decr_model.write(str(decrypted_model[0]))
 
         print("model updated")
+
+
 
 
 

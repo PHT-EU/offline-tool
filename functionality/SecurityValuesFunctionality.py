@@ -97,11 +97,16 @@ class SecurityValuesFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
             error_dialog.setWindowTitle("Private key missing")
             error_dialog.showMessage("Please select a private key to sign the hash.")
             error_dialog.exec_()
-        else:
+        elif len(hash_string) == 128:
             signature = encryption_func.sign_hash(self.pk, encryption_func.hash_string(hash_string))
             print(type(signature))
             self.textEdit_2.setText(str(signature))
             self.label_5.setText("Successfully singed the hash value.")
+        else:
+            error_dialog = QtWidgets.QErrorMessage()
+            error_dialog.setWindowTitle("Unvalid hash format")
+            error_dialog.showMessage("Please select a hash in SHA512 format.")
+            error_dialog.exec_()
 
     def copy_hash(self):
         textboxValue2 = self.textEdit_2.toPlainText()
