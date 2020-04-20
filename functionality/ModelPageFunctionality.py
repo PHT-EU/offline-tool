@@ -64,6 +64,7 @@ class ModelPageFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
                 error_dialog.exec_()
             else:
                 self.pk1 = pk1
+                print(self.pk1)
                 self.label_3.setText(
                     "The selected private key loaded successfully:" + "\n" + "\n" + self.key_filepath2)
 
