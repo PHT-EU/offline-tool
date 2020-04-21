@@ -4,6 +4,8 @@ from visualisation.ChoosePage import Ui_MainWindow
 from functionality import ModelPageFunctionality
 from functionality.SecurityValuesFunctionality import SecurityValuesFunctionality
 import sys, platform
+import qdarkstyle
+import qdarkgraystyle
 
 
 class ChoosePageFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
@@ -40,8 +42,9 @@ class ChoosePageFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
+    #app.setStyleSheet(open("./visualisation/darkorange.stylesheet").read())
     if platform.system() == "Windows" or platform.system() == "Darwin":
-        app.setStyle('Fusion')
+       app.setStyle('Fusion')
     else:
         None
     nextGui = ChoosePageFunctionality()

@@ -40,6 +40,15 @@ Pht-offline-tool/test_data/encr_sym_key
 
 You will find the neccessary functions for key-loading on the ModelPage of the application.
 
+
+## Design options
+
+For the application is a dark-mode available. To activate it uncomment the line 45 in main.py
+
+ ```
+#app.setStyleSheet(open("./visualisation/darkorange.stylesheet").read())
+```
+
 ## Create standalone application
 
 To create an application that you can use on different machines and operating systems follow the tutorial by mhermrmann
