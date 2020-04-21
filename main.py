@@ -42,7 +42,7 @@ class ChoosePageFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
-    #app.setStyleSheet(open("./visualisation/darkorange.stylesheet").read())
+    app.setStyleSheet(open("./visualisation/darkorange.stylesheet").read())
     if platform.system() == "Windows" or platform.system() == "Darwin":
        app.setStyle('Fusion')
     else:
