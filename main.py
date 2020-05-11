@@ -4,6 +4,7 @@ from visualisation.ChoosePage import Ui_MainWindow
 from functionality import ModelPageFunctionality
 from functionality.SecurityValuesFunctionality import SecurityValuesFunctionality
 import sys, platform
+from visualisation.label_dictionary import *
 import qdarkstyle
 import qdarkgraystyle
 
@@ -15,7 +16,7 @@ class ChoosePageFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
         self.setupUi(self)
         self.pushButton.clicked.connect(self.switch_to_security)
         self.pushButton_2.clicked.connect(self.switch_to_model)
-        self.label5_text = "Copyright" + " © " + "<a href=\"https://pht.difuture.de\"><font color=black> MIT </font></a>" + "created 2020, by Felix.B"
+        self.label5_text = main_func_labels["Copyright"]
         self.label_5.setText(self.label5_text)
         self.label_5.linkActivated.connect(self.link_handler)
 
@@ -31,7 +32,7 @@ class ChoosePageFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
 
     @staticmethod
     def link_handler():
-        text = "MIT License" + "\n" + "\n" + "Copyright (c) 2020 Personal Health Train / Implementations / GermanMII / DIFUTURE / PHT-Offline-Tool" + "\n" + "\n" + "Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the Software), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:" + "\n" + "\n" + "The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software." + "\n" + "\n" + "THE SOFTWARE IS PROVIDED AS IS, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE."
+        text = main_func_labels["MIT License"]
         msg = QtWidgets.QMessageBox()
         msg.setIcon(QtWidgets.QMessageBox.Information)
         msg.setText(text)
@@ -42,7 +43,7 @@ class ChoosePageFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
-    app.setStyleSheet(open("./visualisation/darkorange.stylesheet").read())
+    #app.setStyleSheet(open("./visualisation/darkorange.stylesheet").read())
     if platform.system() == "Windows" or platform.system() == "Darwin":
        app.setStyle('Fusion')
     else:

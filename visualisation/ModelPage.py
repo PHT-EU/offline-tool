@@ -8,6 +8,7 @@
 
 #from fbs_runtime.application_context.PyQt5 import ApplicationContext
 from PyQt5 import QtCore, QtGui, QtWidgets
+from visualisation.label_dictionary import Model_Page_labels
 
 
 class Ui_MainWindow(object):
@@ -167,18 +168,18 @@ class Ui_MainWindow(object):
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "PHT offline tool"))
-        self.pushButton.setText(_translate("MainWindow", "Select model files directory"))
-        self.label.setText(_translate("MainWindow", "No directory selected yet"))
-        self.label_4.setText(_translate("MainWindow", "List of Modelfiles"))
-        self.label_6.setText(_translate("MainWindow", "Select the model directory first"))
-        self.label_5.setText(_translate("MainWindow", "No model files selected yet"))
-        self.pushButton_4.setText(_translate("MainWindow", "Decrypt selected models"))
-        self.pushButton_6.setText(_translate("MainWindow", "Show decrypted files"))
-        self.pushButton_5.setText(_translate("MainWindow", "Return "))
-        self.label_2.setText(_translate("MainWindow", "No key file selected"))
-        self.pushButton_3.setText(_translate("MainWindow", "Select private key"))
-        self.pushButton_2.setText(_translate("MainWindow", "Select encrypted symmetric key"))
-        self.label_3.setText(_translate("MainWindow", "No private key selected yet"))
+        self.pushButton.setText(_translate("MainWindow", Model_Page_labels["button_topl"]))
+        self.label.setText(_translate("MainWindow", Model_Page_labels["label_topl"]))
+        self.label_4.setText(_translate("MainWindow", Model_Page_labels["label_list"]))
+        self.label_6.setText(_translate("MainWindow", Model_Page_labels["label_botr"]))
+        self.label_5.setText(_translate("MainWindow", Model_Page_labels["label_botr2"]))
+        self.pushButton_4.setText(_translate("MainWindow", Model_Page_labels["decry_but"]))
+        self.pushButton_6.setText(_translate("MainWindow", Model_Page_labels["show_but"]))
+        self.pushButton_5.setText(_translate("MainWindow", Model_Page_labels["return_but"]))
+        self.label_2.setText(_translate("MainWindow", Model_Page_labels["label_topr"]))
+        self.pushButton_3.setText(_translate("MainWindow", Model_Page_labels["button_topr2"]))
+        self.pushButton_2.setText(_translate("MainWindow", Model_Page_labels["button_topr"]))
+        self.label_3.setText(_translate("MainWindow", Model_Page_labels["label_topr2"]))
 
 
 if __name__ == "__main__":

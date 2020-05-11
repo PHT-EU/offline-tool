@@ -8,6 +8,7 @@
 
 #from fbs_runtime.application_context.PyQt5 import ApplicationContext
 from PyQt5 import QtCore, QtGui, QtWidgets
+from visualisation.label_dictionary import choose_page_labels
 import qdarkstyle
 
 
@@ -82,13 +83,13 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "PHT offline tool"))
-        self.pushButton.setText(_translate("MainWindow", "Security Values"))
-        self.label_2.setText(_translate("MainWindow", "Choose your model files and decrypt these using private and encrypted symmetric key"))
-        self.pushButton_2.setText(_translate("MainWindow", "Model Page"))
-        self.label.setText(_translate("MainWindow", "Generate your private and public keys aswell as hash signing for submitting valid trains"))
-        self.label_4.setText(_translate("MainWindow", "<a href=\"https://pht.difuture.de\"><font color=black>pht.difuture.de</font></a>"))
-        self.label_5.setText(_translate("MainWindow", "Created by Felix Bötte"))
+        MainWindow.setWindowTitle(_translate("MainWindow", choose_page_labels["title"]))
+        self.pushButton.setText(_translate("MainWindow", choose_page_labels["button_left"]))
+        self.label_2.setText(_translate("MainWindow", choose_page_labels["label_right"]))
+        self.pushButton_2.setText(_translate("MainWindow", choose_page_labels["button_right"]))
+        self.label.setText(_translate("MainWindow", choose_page_labels["label_left"]))
+        self.label_4.setText(_translate("MainWindow", choose_page_labels["href_bottom"]))
+        self.label_5.setText(_translate("MainWindow", choose_page_labels["signature"]))
 
 
 

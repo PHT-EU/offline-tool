@@ -8,6 +8,7 @@
 
 #from fbs_runtime.application_context.PyQt5 import ApplicationContext
 from PyQt5 import QtCore, QtGui, QtWidgets
+from visualisation.label_dictionary import Security_Page_labels
 
 
 class Ui_MainWindow(object):
@@ -118,16 +119,16 @@ class Ui_MainWindow(object):
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "PHT offline tool"))
-        self.pushButton.setText(_translate("MainWindow", "Generate private and public key"))
-        self.label.setText(_translate("MainWindow", "No keys generated yet" + "\n" + "\n" + "No path selected yet"))
-        self.label_2.setText(_translate("MainWindow", "Select a valid private key"))
-        self.pushButton_2.setText(_translate("MainWindow", "Select private key"))
-        self.pushButton_3.setText(_translate("MainWindow", "Sign"))
-        self.pushButton_5.setText(_translate("MainWindow", "Return"))
-        self.pushButton_4.setText(_translate("MainWindow", "Copy"))
-        self.label_4.setText(_translate("MainWindow", "Signature"))
-        self.label_3.setText(_translate("MainWindow", "Paste your hash below:"))
-        self.label_5.setText(_translate("MainWindow", "No hash signed yet"))
+        self.pushButton.setText(_translate("MainWindow", Security_Page_labels["button_topl"]))
+        self.label.setText(_translate("MainWindow", Security_Page_labels["label_topl"]))
+        self.label_2.setText(_translate("MainWindow", Security_Page_labels["label_topr"]))
+        self.pushButton_2.setText(_translate("MainWindow", Security_Page_labels["button_topr"]))
+        self.pushButton_3.setText(_translate("MainWindow", Security_Page_labels["button_sign"]))
+        self.pushButton_5.setText(_translate("MainWindow", Security_Page_labels["button_return"]))
+        self.pushButton_4.setText(_translate("MainWindow", Security_Page_labels["button_copy"]))
+        self.label_4.setText(_translate("MainWindow", Security_Page_labels["label_rtxtbox"]))
+        self.label_3.setText(_translate("MainWindow", Security_Page_labels["label_ltxtbox"]))
+        self.label_5.setText(_translate("MainWindow", Security_Page_labels["label_botl"]))
 
 
 if __name__ == "__main__":
