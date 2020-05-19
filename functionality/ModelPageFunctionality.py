@@ -90,7 +90,7 @@ class ModelPageFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
         del self.index[:]
 
         if self.model_direc == "":
-            self.label.setText(Model_Page_func["no_model_label"])
+            self.label.setText(Model_Page_func["no_direc_label"])
         else:
             for id in list(self.walklevel(self.model_direc, 1))[0][2]:
                 self.direc_list.append(id)
