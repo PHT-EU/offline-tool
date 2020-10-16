@@ -16,6 +16,7 @@ class Ui_MainWindow(object):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(760, 632)
         MainWindow.setMinimumSize(QtCore.QSize(552, 515))
+        self.setStyleSheet("background-color: #e6e6e6;")
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.gridLayout_6 = QtWidgets.QGridLayout(self.centralwidget)
@@ -161,6 +162,23 @@ class Ui_MainWindow(object):
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
         self.statusbar.setObjectName("statusbar")
         MainWindow.setStatusBar(self.statusbar)
+
+        self.label.setStyleSheet("font: 14px Comic Sans MS")
+        self.label_2.setStyleSheet("font: 14px Comic Sans MS")
+        self.label_3.setStyleSheet("font: 14px Comic Sans MS")
+        self.label_4.setStyleSheet("font: 16px Comic Sans MS")
+        self.label_5.setStyleSheet("font: 14px Comic Sans MS")
+        self.label_6.setStyleSheet("font: 14px Comic Sans MS")
+        self.pushButton.setStyleSheet("font: 14px Comic Sans MS")
+        self.pushButton_2.setStyleSheet("font: 14px Comic Sans MS")
+        self.pushButton_3.setStyleSheet("font: 14px Comic Sans MS")
+        self.pushButton_4.setStyleSheet("font: 14px Comic Sans MS")
+        self.pushButton_5.setStyleSheet("font: 14px Comic Sans MS")
+        self.pushButton_6.setStyleSheet("font: 14px Comic Sans MS")
+
+        self.scrollArea.setStyleSheet("QScrollArea {background-color:white;}")
+        self.scrollArea.setStyleSheet("background-color:white;")
+
 
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)

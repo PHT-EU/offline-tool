@@ -15,6 +15,7 @@ class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(770, 600)
+        self.setStyleSheet("background-color: #e6e6e6;")
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.gridLayout_2 = QtWidgets.QGridLayout(self.centralwidget)
@@ -112,6 +113,20 @@ class Ui_MainWindow(object):
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
         self.statusbar.setObjectName("statusbar")
         MainWindow.setStatusBar(self.statusbar)
+
+        self.label.setStyleSheet("font: 14px Comic Sans MS")
+        self.label_2.setStyleSheet("font: 14px Comic Sans MS")
+        self.label_3.setStyleSheet("font: 15px Comic Sans MS")
+        self.label_4.setStyleSheet("font: 15px Comic Sans MS")
+        self.label_5.setStyleSheet("font: 14px Comic Sans MS")
+        self.pushButton.setStyleSheet("font: 14px Comic Sans MS")
+        self.pushButton_2.setStyleSheet("font: 14px Comic Sans MS")
+        self.pushButton_3.setStyleSheet("font: 14px Comic Sans MS")
+        self.pushButton_4.setStyleSheet("font: 14px Comic Sans MS")
+        self.pushButton_5.setStyleSheet("font: 14px Comic Sans MS")
+        self.textEdit.setStyleSheet("background-color: #f2f2f2; border:1.5px solid #b3b3b3;")
+        self.textEdit_2.setStyleSheet("background-color: #f2f2f2; border:1.5px solid #b3b3b3;")
+
 
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
