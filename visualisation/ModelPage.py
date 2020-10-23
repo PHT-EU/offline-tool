@@ -167,7 +167,7 @@ class Ui_MainWindow(object):
         self.label_2.setStyleSheet("font: 14px Arial")
         self.label_3.setStyleSheet("font: 14px Arial")
         self.label_4.setStyleSheet("font: 16px Arial")
-        self.label_5.setStyleSheet("font: 14px Arial")
+        self.label_5.setStyleSheet("font: 14px Arial; border 0px;")
         self.label_6.setStyleSheet("font: 14px Arial")
         self.pushButton.setStyleSheet("font: 14px Arial")
         self.pushButton_2.setStyleSheet("font: 14px Arial")
@@ -176,8 +176,9 @@ class Ui_MainWindow(object):
         self.pushButton_5.setStyleSheet("font: 14px Arial")
         self.pushButton_6.setStyleSheet("font: 14px Arial")
 
-        self.scrollArea.setStyleSheet("QScrollArea {background-color:white;}")
-        self.scrollArea.setStyleSheet("background-color:white;")
+        #self.scrollAreaWidgetContents.setStyleSheet("background-color: #f2f2f2; border:1.5px solid #b3b3b3;")
+        #self.label_5.setStyleSheet("background-color:white; border:1.5px solid #b3b3b3; font: 14px Arial;")
+        self.listWidget.setStyleSheet("""QListWidget{background: #f2f2f2;  border:1.5px solid #b3b3b3;}""")
 
 
         self.retranslateUi(MainWindow)

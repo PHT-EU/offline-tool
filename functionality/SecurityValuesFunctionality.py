@@ -102,9 +102,9 @@ class SecurityValuesFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
             error_dialog.exec_()
         elif len(hash_string) == 128:
             signature = encryption_func.sign_hash(self.pk, encryption_func.hash_string(hash_string))
-            #signature_str = signature.decode('utf-8')
+            signature_hex = signature.hex()
             print(type(signature))
-            self.textEdit_2.setText(str(signature))
+            self.textEdit_2.setText(str(signature_hex))
             self.label_5.setText(Security_Page_func["hash_sign"])
         else:
             error_dialog = QtWidgets.QErrorMessage()
