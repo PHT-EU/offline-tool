@@ -171,6 +171,7 @@ class ModelPageFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
             try:
                 with open(self.encryp_key_path, "rb") as encr_sym_key:
                     encr_key = encr_sym_key.read()
+                    encr_key = bytes.fromhex(encr_key.decode())
                     print("sym key read")
             except:
                 error_dialog = QtWidgets.QErrorMessage()
@@ -201,7 +202,7 @@ class ModelPageFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
                         print("models decrypted")
 
                         for i in range(len(selected_models)):
-                            with open(selected_models[i], "w") as decr_model:
+                            with open('decrypted_' + selected_models[i], "w") as decr_model:
                                 decr_model.write(str(decrypted_models[i]))
                         self.decryption_process = 1
                         self.label_5.setText(Model_Page_func["decry_succ"])

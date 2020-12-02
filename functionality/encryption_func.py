@@ -117,10 +117,7 @@ def decrypt_models(models, sym_key):
         with open(model, "rb") as mf:
             token = mf.read()
         fernet_decrypt = fernet.decrypt(token)
-        if '.pkl' in model:
-            decr_models.append(pickle.loads(fernet_decrypt))
-        else:
-            decr_models.append(fernet_decrypt)
+        decr_models.append(fernet_decrypt)
     return decr_models
 
 
