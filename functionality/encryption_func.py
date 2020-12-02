@@ -7,7 +7,8 @@ from cryptography.fernet import Fernet
 from PyQt5.Qt import QApplication, QClipboard
 from PyQt5 import QtCore, QtGui, QtWidgets
 import os
-
+import pickle
+from io import BytesIO
 
 def create_rsa_keys():
     """
@@ -115,7 +116,10 @@ def decrypt_models(models, sym_key):
     for model in models:
         with open(model, "rb") as mf:
             token = mf.read()
-            fernet_decrypt = fernet.decrypt(token)
+        fernet_decrypt = fernet.decrypt(token)
+        if '.pkl' in model:
+            decr_models.append(pickle.loads(fernet_decrypt))
+        else:
             decr_models.append(fernet_decrypt)
     return decr_models
 
