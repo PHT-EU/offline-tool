@@ -6,8 +6,7 @@ from visualisation.label_dictionary import Model_Page_func
 from pathlib import Path
 from functionality import encryption_func
 import sys, platform, subprocess, ntpath, main, os
-
-
+import pickle
 
 class ModelPageFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
     def __init__(self, parent=None):
@@ -200,10 +199,21 @@ class ModelPageFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
                     else:
 
                         print("models decrypted")
-
-                        for i in range(len(selected_models)):
-                            with open('decrypted_' + selected_models[i], "w") as decr_model:
-                                decr_model.write(str(decrypted_models[i]))
+                        try:
+                            for i in range(len(selected_models)):
+                                path_file = os.path.split(selected_models[i])
+                                save_name = path_file[0] + '/decrypted_'
+                                print(save_name)
+                                if '.pkl' in selected_models[i]:
+                                    save_name += path_file[1][:-3] + 'txt'
+                                    with open(save_name, "w") as decr_model:
+                                        decr_model.write(str(pickle.loads(decrypted_models[i])))
+                                else:
+                                    with open(save_name, "w") as decr_model:
+                                        decr_model.write(str(decrypted_models[i]))
+                        except:
+                            error_dialog = QtWidgets.QErrorMessage()
+                            error_dialog.setWindowTitle("Error during saving process of decrypted files")
                         self.decryption_process = 1
                         self.label_5.setText(Model_Page_func["decry_succ"])
 
