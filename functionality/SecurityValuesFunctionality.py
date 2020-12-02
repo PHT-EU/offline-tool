@@ -72,7 +72,7 @@ class SecurityValuesFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def pick_key_filepath(self):
         file_dialog = QtWidgets.QFileDialog(self)
-        keyfile = file_dialog.getOpenFileName(None, "Window Name", "", "pem(*_sk.pem)")
+        keyfile = file_dialog.getOpenFileName(None, "Window Name", "")
         self.key_filepath = keyfile[0]
 
         try:
