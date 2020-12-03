@@ -94,13 +94,14 @@ class SecurityValuesFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def sign_hash_btn(self):
         hash_string = self.textEdit.toPlainText()
+        hash_string = bytes.fromhex(hash_string)
 
         if self.pk is None:
             error_dialog = QtWidgets.QErrorMessage()
             error_dialog.setWindowTitle("Private key missing")
             error_dialog.showMessage(Security_Page_func["no_pk_hash_err"])
             error_dialog.exec_()
-        elif len(hash_string) == 128:
+        elif len(hash_string) > 1:
             signature = encryption_func.sign_hash(self.pk, encryption_func.hash_string(hash_string))
             signature_hex = signature.hex()
             print(type(signature))
