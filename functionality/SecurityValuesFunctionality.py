@@ -93,7 +93,7 @@ class SecurityValuesFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
                     Security_Page_func["load_key"] + self.key_filepath)
 
     def sign_hash_btn(self):
-        hash_string = self.textEdit.toPlainText()
+        hash_string = self.textEdit.toPlainText().rstrip().lstrip()
         hash_string = bytes.fromhex(hash_string)
 
         if self.pk is None:
@@ -102,10 +102,11 @@ class SecurityValuesFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
             error_dialog.showMessage(Security_Page_func["no_pk_hash_err"])
             error_dialog.exec_()
         elif len(hash_string) > 1:
-            signature = encryption_func.sign_hash(self.pk, encryption_func.hash_string(hash_string))
+            signature = encryption_func.sign_hash(self.pk, hash_string)
             signature_hex = signature.hex()
+            print(signature_hex)
             print(type(signature))
-            self.textEdit_2.setText(str(signature_hex))
+            self.textEdit_2.setText(signature_hex)
             self.label_5.setText(Security_Page_func["hash_sign"])
         else:
             error_dialog = QtWidgets.QErrorMessage()

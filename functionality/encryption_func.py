@@ -30,6 +30,7 @@ def create_rsa_keys():
     public_key_pem = public_key.public_bytes(encoding=serialization.Encoding.PEM,
                                              format=serialization.PublicFormat.SubjectPublicKeyInfo)
     public_key_pem = public_key_pem.hex()
+    print(public_key_pem)
     return private_key_pem, public_key_pem
 
 
