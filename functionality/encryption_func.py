@@ -29,6 +29,7 @@ def create_rsa_keys():
     public_key = private_key.public_key()
     public_key_pem = public_key.public_bytes(encoding=serialization.Encoding.PEM,
                                              format=serialization.PublicFormat.SubjectPublicKeyInfo)
+    public_key_pem = public_key_pem.hex()
     return private_key_pem, public_key_pem
 
 
@@ -44,7 +45,7 @@ def store_keys(path, rsa_private_key_pem,rsa_public_key_pem, name):
     with open(os.path.join(path, name + "_sk.pem"), "wb") as sk:
         sk.write(rsa_private_key_pem)
         print("Wrote " + name + " to " + path)
-    with open(os.path.join(path, name + "_pk.pem"), "wb") as pk:
+    with open(os.path.join(path, name + "_pk.pem"), "w") as pk:
         pk.write(rsa_public_key_pem)
         print("Wrote " + name + " to " + path)
 
