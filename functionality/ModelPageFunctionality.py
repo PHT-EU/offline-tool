@@ -170,7 +170,10 @@ class ModelPageFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
             try:
                 with open(self.encryp_key_path, "rb") as encr_sym_key:
                     encr_key = encr_sym_key.read()
-                    encr_key = bytes.fromhex(encr_key.decode())
+                    try:
+                        encr_key = bytes.fromhex(encr_key.decode())
+                    except:
+                        print("key not in bytes")
                     print("sym key read")
             except:
                 error_dialog = QtWidgets.QErrorMessage()
