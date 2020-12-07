@@ -35,6 +35,11 @@ class ModelPageFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
         self.close()
 
     def select_encrypted_key(self):
+        """
+        Saves path of encrypted_symmetric_key in a global variable through file system selection
+        :param
+        :return:
+        """
         keyfile1 = QtWidgets.QFileDialog.getOpenFileName(self)
         self.encryp_key_path = keyfile1[0]
 
@@ -45,6 +50,11 @@ class ModelPageFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
             self.label_2.setText(Model_Page_func["encry_key_error"])
 
     def pick_key_filepath2(self):
+        """
+        Saves path of private_key in a global variable through file system selection
+        :param
+        :return:
+        """
         file_dialog = QtWidgets.QFileDialog(self)
         keyfile2 = file_dialog.getOpenFileName(None, "Window Name", "")
         self.key_filepath2 = keyfile2[0]
@@ -69,6 +79,11 @@ class ModelPageFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
                     Model_Page_func["pk_suc_label"] + self.key_filepath2)
 
     def walklevel(self, some_dir, level=1):
+        """
+        filter out file-paths that lead to other directories
+        :param
+        :return:
+        """
         some_dir = some_dir.rstrip(os.path.sep)
         assert os.path.isdir(some_dir)
         num_sep = some_dir.count(os.path.sep)
@@ -79,6 +94,12 @@ class ModelPageFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
                 del dirs[:]
 
     def choose_modelfiles_direc(self):
+        """
+        lists all files in a chosen directory with links to respective paths in a PyQT-ListWidget
+        when files are selected the corresponding paths are selected and ready for decryption
+        :param
+        :return:
+        """
         choosen_direc = QtWidgets.QFileDialog.getExistingDirectory(self)
         self.model_direc = choosen_direc
         self.direc_list = []
@@ -113,7 +134,11 @@ class ModelPageFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
             self.label.setText(Model_Page_func["dir_err_label"])
 
     def walk_dir(self, model_direc):
-        # walks the specified directory root and returns a list of paths to these files
+        """
+        walks the specified directory root and returns a list of paths to these files
+        :param directory to walk through
+        :return: list of paths to each file in chosen directory
+        """
         file_list = []
         towalk = [model_direc]
         while towalk:
@@ -134,6 +159,11 @@ class ModelPageFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
         return tail or ntpath.basename(head)
 
     def on_click_listbox(self):
+        """
+        saves path to files in a list that were clicked on in the PyQT-ListWidget
+        :param
+        :return:
+        """
         print("index list1",self.index)
         self.file_list = self.walk_dir(self.model_direc)
         if self.listWidget.currentRow() not in self.index:
@@ -158,7 +188,12 @@ class ModelPageFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
 
 
     def decrypt_models(self):
-
+        """
+        decrypts the before selected encrypted_symmetric_key with the chosen private_key and raises error if mismatch
+        then decrypts the selected files in the PyQT-ListWidget and writes the decrypted file into the same directory
+        :param
+        :return: decrypted models in .txt format
+        """
         selected_models = self.selpath
 
         if self.pk1 is None:
@@ -221,6 +256,11 @@ class ModelPageFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
                         self.label_5.setText(Model_Page_func["decry_succ"])
 
     def show_decrypt_files(self):
+        """
+        opens directory in explorer where the decrypted modelfiles are saved
+        :param
+        :return:
+        """
         if self.decryption_process == 1:
 
             if platform.system() == "Windows":

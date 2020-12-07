@@ -36,6 +36,12 @@ class SecurityValuesFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
         print(self.folder_path)
 
     def generate_private_key(self):
+        """
+        Choose a directory where a private_key and public_key are then stored
+        Then choose a name for the key_pair which will have the form "name" + "_pk.pem" / "_sk.pem"
+        :param
+        :return:
+        """
         choosen_direc = QtWidgets.QFileDialog.getExistingDirectory(self)
         self.folder_path = choosen_direc
 
@@ -71,6 +77,11 @@ class SecurityValuesFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
 
 
     def pick_key_filepath(self):
+        """
+        Choose a key-file in the corresponding directory that will then be saved into a global variable
+        :param
+        :return:
+        """
         file_dialog = QtWidgets.QFileDialog(self)
         keyfile = file_dialog.getOpenFileName(None, "Window Name", "")
         self.key_filepath = keyfile[0]
@@ -93,6 +104,11 @@ class SecurityValuesFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
                     Security_Page_func["load_key"] + self.key_filepath)
 
     def sign_hash_btn(self):
+        """
+        Signs a given hash (SHA512-format) with the before loaded private key
+        :param
+        :return: signed-hash in hex-format
+        """
         hash_string = self.textEdit.toPlainText().rstrip().lstrip()
         hash_string = bytes.fromhex(hash_string)
 
@@ -115,6 +131,11 @@ class SecurityValuesFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
             error_dialog.exec_()
 
     def copy_hash(self):
+        """
+        displays the signed-hash in hex-format in the PyQT-TextBox
+        :param
+        :return:
+        """
         textboxValue2 = self.textEdit_2.toPlainText()
         clipboard = QApplication.clipboard()
         clipboard.clear(mode=clipboard.Clipboard)
