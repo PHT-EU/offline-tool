@@ -2,7 +2,10 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 #from fbs_runtime.application_context.PyQt5 import ApplicationContext
 from visualisation.ChoosePage import Ui_MainWindow
 from functionality import ModelPageFunctionality
+from functionality import SecureAddtionFunctionality
 from functionality.SecurityValuesFunctionality import SecurityValuesFunctionality
+from functionality.SecureAddtionFunctionality import SecureAdditionFunctionality
+
 import sys, platform
 from visualisation.label_dictionary import *
 import qdarkstyle
@@ -16,6 +19,7 @@ class ChoosePageFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
         self.setupUi(self)
         self.pushButton.clicked.connect(self.switch_to_security)
         self.pushButton_2.clicked.connect(self.switch_to_model)
+        self.pushButton_3.clicked.connect(self.switch_to_SecureAddition)
         self.label5_text = main_func_labels["Copyright"]
         self.label_5.setText(self.label5_text)
         self.label_5.linkActivated.connect(self.link_handler)
@@ -28,6 +32,11 @@ class ChoosePageFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
     def switch_to_security(self):
         self.SecurityValues_Frame = SecurityValuesFunctionality()
         self.SecurityValues_Frame.show()
+        self.close()
+
+    def switch_to_SecureAddition(self):
+        self.SecureAddition_Frame = SecureAdditionFunctionality()
+        self.SecureAddition_Frame.show()
         self.close()
 
     @staticmethod

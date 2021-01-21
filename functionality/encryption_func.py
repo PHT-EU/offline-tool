@@ -9,6 +9,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 import os
 import pickle
 from io import BytesIO
+import json
 
 def create_rsa_keys():
     """
@@ -30,7 +31,7 @@ def create_rsa_keys():
     public_key_pem = public_key.public_bytes(encoding=serialization.Encoding.PEM,
                                              format=serialization.PublicFormat.SubjectPublicKeyInfo)
     public_key_pem = public_key_pem.hex()
-    print(public_key_pem)
+    print(type(public_key_pem))
     return private_key_pem, public_key_pem
 
 
@@ -47,6 +48,8 @@ def store_keys(path, rsa_private_key_pem,rsa_public_key_pem, name):
         sk.write(rsa_private_key_pem)
         print("Wrote " + name + " to " + path)
     with open(os.path.join(path, name + "_pk.pem"), "w") as pk:
+        print(type(pk))
+        print(type(rsa_public_key_pem))
         pk.write(rsa_public_key_pem)
         print("Wrote " + name + " to " + path)
 
@@ -127,5 +130,51 @@ def hash_string(string):
     hasher = hashes.Hash(hashes.SHA512(), default_backend())
     hasher.update(string.encode())
     return hasher.finalize()
+
+
+
+def load_config(config):
+
+    data = ""
+
+    with open(config) as f:
+        data = json.load(f)
+
+    print(data)
+    return data
+
+
+
+def load_public_key(key: str):
+    """
+    Loads a public key
+    :param key: string representation of a public key
+    :return: public key object for asymmetric encryption
+    """
+    public_key = serialization.load_pem_public_key(bytes.fromhex(key),
+                                                   backend=default_backend())
+    return public_key
+
+
+def verify_digital_signature(config):
+    """
+    Verifies the digital signature of the train_config by iterating over the list of signatures and verifying each one
+    using the correct public key stored in the train configuration json
+
+    :raise: InvalidSignatureError if any of the signed values can not be validated using the provided public keys
+
+    """
+    ds = config["digital_signature"]
+    print(ds)
+    for sig in ds:
+        public_key = load_public_key(
+            config["rsa_public_keys"][sig["station"]])
+        public_key.verify(bytes.fromhex(sig["sig"][0]),
+                          bytes.fromhex(sig["sig"][1]),
+                          padding.PSS(mgf=padding.MGF1(hashes.SHA512()),
+                                      salt_length=padding.PSS.MAX_LENGTH),
+                          utils.Prehashed(hashes.SHA512())
+                          )
+    print("All Valid")
 
 

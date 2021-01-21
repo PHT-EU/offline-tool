@@ -13,6 +13,7 @@ class ModelPageFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
         super(ModelPageFunctionality, self).__init__(parent)
         self.setupUi(self)
         self.encryp_key_path = ("", "")
+        self.config_file_path = ("", "")
         self.key_filepath2 = ""
         self.model_direc = ""
         self.pk1 = None
@@ -23,7 +24,8 @@ class ModelPageFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
         self.counter = 0
         self.decryption_process = 0
         self.pushButton_5.clicked.connect(self.return_page)
-        self.pushButton_2.clicked.connect(self.select_encrypted_key)
+        #self.pushButton_2.clicked.connect(self.select_encrypted_key)
+        self.pushButton_2.clicked.connect(self.load_config_sig_verification)
         self.pushButton.clicked.connect(self.choose_modelfiles_direc)
         self.pushButton_4.clicked.connect(self.decrypt_models)
         self.pushButton_3.clicked.connect(self.pick_key_filepath2)
@@ -48,6 +50,36 @@ class ModelPageFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
             print(self.encryp_key_path)
         else:
             self.label_2.setText(Model_Page_func["encry_key_error"])
+
+
+
+    def load_config_sig_verification(self):
+        """
+        Saves path of train_config.json in a global variable through file system selection
+        Then it verifies the digital signature with the public keys given in the config file
+        :param
+        :return:
+        """
+
+        config_file = QtWidgets.QFileDialog.getOpenFileName(self)
+        self.config_file_path = config_file[0]
+
+        if self.config_file_path != "":
+            config = encryption_func.load_config(self.config_file_path)
+            self.label_2.setText("Train-Config file got successfully loaded")
+
+            try:
+                encryption_func.verify_digital_signature(config)
+                self.label_2.setText("Train-Config file got successfully loaded & All signatures are valid")
+            except:
+                self.label_2.setText("During the verification of the digital signatures did occur an mismatch error")
+
+            encry_sym_key = bytes.fromhex(config["user_encrypted_sym_key"])
+
+            self.encryp_key_path = encry_sym_key
+            self.label_2.setText("Train-Config file got successfully loaded & All signatures are valid & encrypted symmetric key got loaded")
+
+
 
     def pick_key_filepath2(self):
         """
@@ -203,13 +235,9 @@ class ModelPageFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
             error_dialog.exec_()
         else:
             try:
-                with open(self.encryp_key_path, "rb") as encr_sym_key:
-                    encr_key = encr_sym_key.read()
-                    try:
-                        encr_key = bytes.fromhex(encr_key.decode())
-                    except:
-                        print("key not in bytes")
-                    print("sym key read")
+                #with open(self.encryp_key_path, "rb") as encr_sym_key:
+                #    encr_key = encr_sym_key.read().hex()
+                encr_key = self.encryp_key_path
             except:
                 error_dialog = QtWidgets.QErrorMessage()
                 error_dialog.setWindowTitle("No symmetric key selected")
@@ -243,12 +271,16 @@ class ModelPageFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
                                 save_name = path_file[0] + '/decrypted_'
                                 print(save_name)
                                 if '.pkl' in selected_models[i]:
+                                    print("1st case")
                                     save_name += path_file[1][:-3] + 'txt'
                                     with open(save_name, "w") as decr_model:
                                         decr_model.write(str(pickle.loads(decrypted_models[i])))
+                                        print("file written 1")
                                 else:
+                                    print("2nd case")
                                     with open(save_name, "w") as decr_model:
                                         decr_model.write(str(decrypted_models[i]))
+                                        print("file written 2")
                         except:
                             error_dialog = QtWidgets.QErrorMessage()
                             error_dialog.setWindowTitle("Error during saving process of decrypted files")
