@@ -122,13 +122,13 @@ class SecureAdditionFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
             error_dialog.showMessage(Security_Page_func["no_pk_hash_err"])
             error_dialog.exec_()
         elif len(encry_string) > 1:
-            #self.pubkey_filepath = int(self.pubkey_filepath)
-            #print(self.pubkey_filepath)
+            self.pubkey_filepath = int(self.pubkey_filepath)
+            print(self.pubkey_filepath)
             #print(int(encry_string))
 
-            self.pubkey_filepath = primes.PublicKey.from_n(int(self.pubkey_filepath))
+            #self.pubkey_filepath = primes.PublicKey.from_n(self.pubkey_filepath)
 
-            result = primes.decrypt(self.pk, self.pubkey_filepath, int(encry_string))
+            result = primes.decrypt_int(self.pk, self.pubkey_filepath, int(encry_string))
             self.textEdit_2.setText("Number of patients decrypted: {}".format(result))
             self.label_5.setText("Decryption was successfull")
         else:
