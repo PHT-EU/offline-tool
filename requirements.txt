@@ -1,7 +1,7 @@
 Deprecated==1.2.9
 PyQt5==5.7.1
 QDarkStyle==2.8.1
-QtPy==1.9.0	1.9.0
+QtPy==1.9.0
 cffi==1.14.0
 cryptography==2.8
 helpdev==0.6.10
