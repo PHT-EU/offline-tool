@@ -10,6 +10,39 @@ import os
 import pickle
 from io import BytesIO
 import json
+from typing import List, Union, BinaryIO
+
+
+class FileEncryptor:
+    """
+    Performs symmetric encryption and decryption of sensitive files belonging to the train cargo
+    """
+
+    def __init__(self, key: bytes):
+        self.fernet = Fernet(key)
+
+    def decrypt_files(self, files: Union[List[str], List[BinaryIO]], binary_files=False):
+        """
+        Decrypt the given files using symmetric encryption
+        :return:
+        """
+        print("Decrypting files..")
+        if binary_files:
+            # TODO evaluate memory consumption
+            decr_files = []
+            for i, file in enumerate(files):
+                print(f"file {i + 1}/{len(files)}...", end="")
+                data = self.fernet.decrypt(file.read())
+                decr_files.append(BytesIO(data))
+                print("Done")
+            return decr_files
+        for i, file in enumerate(files):
+            print(f"File {i + 1}/{len(files)}...", end="")
+            with open(file, "rb") as f:
+                decr_file = self.fernet.decrypt(f.read())
+            with open(file, "wb") as ef:
+                ef.write(decr_file)
+            print("Done")
 
 def create_rsa_keys():
     """

@@ -8,6 +8,7 @@ from functionality import encryption_func
 import sys, platform, subprocess, ntpath, main, os
 import pickle
 
+
 class ModelPageFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
     def __init__(self, parent=None):
         super(ModelPageFunctionality, self).__init__(parent)
@@ -235,8 +236,6 @@ class ModelPageFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
             error_dialog.exec_()
         else:
             try:
-                #with open(self.encryp_key_path, "rb") as encr_sym_key:
-                #    encr_key = encr_sym_key.read().hex()
                 encr_key = self.encryp_key_path
             except:
                 error_dialog = QtWidgets.QErrorMessage()
@@ -245,7 +244,7 @@ class ModelPageFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
                 error_dialog.exec_()
             else:
                 try:
-                    sym_key = encryption_func.decrypt_symmetric_key(encr_key, self.pk1)
+                    decrypted_sym_key = encryption_func.decrypt_symmetric_key(encr_key, self.pk1)
                     print("sym key decrypted")
                 except:
                     error_dialog = QtWidgets.QErrorMessage()
@@ -255,7 +254,10 @@ class ModelPageFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
                     error_dialog.exec_()
                 else:
                     try:
-                        decrypted_models = encryption_func.decrypt_models(selected_models, sym_key)
+                        file_encryptor = encryption_func.FileEncryptor(decrypted_sym_key)
+                        decrypted_models = encryption_func.decrypt_models(selected_models, decrypted_sym_key)
+                        print("models decrypted_1")
+                        print(decrypted_models[0])
                     except:
                         error_dialog = QtWidgets.QErrorMessage()
                         error_dialog.setWindowTitle("Wrong symmetric key selected")
@@ -276,10 +278,11 @@ class ModelPageFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
                                     with open(save_name, "w") as decr_model:
                                         decr_model.write(str(pickle.loads(decrypted_models[i])))
                                         print("file written 1")
-                                else:
+                                elif ".pdf" in selected_models[i]:
                                     print("2nd case")
-                                    with open(save_name, "w") as decr_model:
-                                        decr_model.write(str(decrypted_models[i]))
+                                    save_name += path_file[1][:-3] + 'pdf'
+                                    with open(save_name, "wb") as decr_model:
+                                        decr_model.write(decrypted_models[i])
                                         print("file written 2")
                         except:
                             error_dialog = QtWidgets.QErrorMessage()
