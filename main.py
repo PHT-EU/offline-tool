@@ -8,8 +8,8 @@ from functionality.SecureAddtionFunctionality import SecureAdditionFunctionality
 
 import sys, platform
 from visualisation.label_dictionary import *
-import qdarkstyle
-import qdarkgraystyle
+#import qdarkstyle
+#import qdarkgraystyle
 
 
 class ChoosePageFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):

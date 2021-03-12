@@ -6,7 +6,7 @@
 #
 # WARNING! All changes made in this file will be lost!
 
-
+#from fbs_runtime.application_context.PyQt5 import ApplicationContext
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 
@@ -126,7 +126,7 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "PHT offline tool"))
         self.pushButton.setText(_translate("MainWindow", "Generate key pair"))
         self.label.setText(_translate("MainWindow", "No keys generated yet"))
         self.pushButton_2.setText(_translate("MainWindow", "Pick and load private key"))

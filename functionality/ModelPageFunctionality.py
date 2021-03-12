@@ -31,10 +31,16 @@ class ModelPageFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
         self.pushButton_4.clicked.connect(self.decrypt_models)
         self.pushButton_3.clicked.connect(self.pick_key_filepath2)
         self.pushButton_6.clicked.connect(self.show_decrypt_files)
+        self.pushButton_7.clicked.connect(self.secure_addition_page)
 
     def return_page(self):
         self.Choose_Page_Frame = main.ChoosePageFunctionality()
         self.Choose_Page_Frame.show()
+        self.close()
+
+    def secure_addition_page(self):
+        self.Secure_Addition_Page_Frame = main.SecureAdditionFunctionality()
+        self.Secure_Addition_Page_Frame.show()
         self.close()
 
     def select_encrypted_key(self):
@@ -257,7 +263,7 @@ class ModelPageFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
                         file_encryptor = encryption_func.FileEncryptor(decrypted_sym_key)
                         decrypted_models = encryption_func.decrypt_models(selected_models, decrypted_sym_key)
                         print("models decrypted_1")
-                        print(decrypted_models[0])
+                        #print(decrypted_models[0])
                     except:
                         error_dialog = QtWidgets.QErrorMessage()
                         error_dialog.setWindowTitle("Wrong symmetric key selected")
@@ -284,6 +290,12 @@ class ModelPageFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
                                     with open(save_name, "wb") as decr_model:
                                         decr_model.write(decrypted_models[i])
                                         print("file written 2")
+                                elif ".png" in selected_models[i]:
+                                    print("3rd case")
+                                    save_name += path_file[1][:-3] + 'png'
+                                    with open(save_name, "wb") as decr_model:
+                                        decr_model.write(decrypted_models[i])
+                                        print("file written 3")
                         except:
                             error_dialog = QtWidgets.QErrorMessage()
                             error_dialog.setWindowTitle("Error during saving process of decrypted files")

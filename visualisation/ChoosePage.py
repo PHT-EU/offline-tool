@@ -16,15 +16,16 @@ class Ui_MainWindow(object):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(820, 710)
         MainWindow.setMinimumSize(QtCore.QSize(638, 587))
+        self.setStyleSheet("background-color: #e6e6e6;")
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.gridLayout = QtWidgets.QGridLayout(self.centralwidget)
         self.gridLayout.setObjectName("gridLayout")
         self.label_3 = QtWidgets.QLabel(self.centralwidget)
         self.label_3.setText("")
-        '''self.appctxt = ApplicationContext()
-        self.image_path = self.appctxt.get_resource('PHT_offline-tool.png')
-        self.label_3.setPixmap(QtGui.QPixmap(self.image_path)) '''
+        #self.appctxt = ApplicationContext()
+        #self.image_path = self.appctxt.get_resource('PHT_offline-tool.png')
+        #self.label_3.setPixmap(QtGui.QPixmap(self.image_path))
 
         self.label_3.setPixmap(QtGui.QPixmap("./visualisation/PHT_offline-tool.png"))
         self.label_3.setScaledContents(True)
@@ -97,7 +98,7 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "PHT offline tool"))
         self.label_2.setText(_translate("MainWindow", "Choose your model files and decrypt them using private and encrypted symmetric key"))
         self.pushButton.setText(_translate("MainWindow", "Security Values"))
         self.label.setText(_translate("MainWindow", "Generate your private and public keys aswell as hash signing for submitting valid trains"))

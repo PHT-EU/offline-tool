@@ -187,7 +187,7 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "PHT offline tool"))
         self.pushButton.setText(_translate("MainWindow", "Select model files directory"))
         self.label.setText(_translate("MainWindow", "No directory chosen yet"))
         self.pushButton_7.setText(_translate("MainWindow", "Secure Addition Page"))
