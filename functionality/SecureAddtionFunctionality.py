@@ -16,6 +16,7 @@ class SecureAdditionFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
         self.private_key_name = ""
         self.public_key_name = ""
         self.pk = ""
+        self.pubkey = ""
         self.pubkey_filepath = ""
         self.pushButton_5.clicked.connect(self.return_page)
         self.pushButton.clicked.connect(self.generate_key_pair)
@@ -62,8 +63,6 @@ class SecureAdditionFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
                 pk = str(pk.n)
                 print(pk)
                 pickle.dump(sk, open(self.private_key_name + "_sk.p", "wb"))
-                #with open(self.private_key_name + "_sk.p", "wb") as private_key:
-                #    private_key.write(sk)
                 with open(self.private_key_name + "_pk.p", "w") as pub_key:
                     pub_key.write(pk)
                 self.label.setText(Security_Page_func["key_succ"] + choosen_direc)
@@ -88,13 +87,14 @@ class SecureAdditionFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
 
         try:
             pk = pickle.load(open(self.private_key_filepath, "rb"))
+            print("private_key loaded : ", pk)
             try:
                 pub_key = open(self.pubkey_filepath, "r")
-                self.pubkey_filepath = pub_key.read()
+                self.pubkey = pub_key.read()
             except:
-                pub_key = open(self.pubkey_filepath, "rb")
-                self.pubkey_filepath = pub_key.read()
-            print(self.pubkey_filepath)
+                pub_key = pickle.load(open(self.pubkey_filepath, "rb"))
+                print("public_key loaded :", pub_key)
+                self.pubkey = pub_key.n
         except:
             self.label_2.setText(Security_Page_func["pick_key_label_again"])
         else:
@@ -126,13 +126,13 @@ class SecureAdditionFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
             error_dialog.showMessage(Security_Page_func["no_pk_hash_err"])
             error_dialog.exec_()
         elif len(encry_string) > 1:
-            self.pubkey_filepath = int(self.pubkey_filepath)
-            print(self.pubkey_filepath)
+            self.pubkey = int(self.pubkey)
+            print(self.pubkey)
             #print(int(encry_string))
 
             #self.pubkey_filepath = primes.PublicKey.from_n(self.pubkey_filepath)
 
-            result = primes.decrypt_int(self.pk, self.pubkey_filepath, int(encry_string))
+            result = primes.decrypt_int(self.pk, self.pubkey, int(encry_string))
             self.textEdit_2.setText("Number of patients decrypted: {}".format(result))
             self.label_5.setText("Decryption was successfull")
         else:
