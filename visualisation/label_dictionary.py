@@ -69,6 +69,7 @@ Security_Page_func = {
     "key_succ" : "Keys successfully generated in:" + "\n" + "\n",
     "key_err" : "You did not select a valid directory",
     "pick_key_label" : "Please select a keyfile",
+    "pick_key_label_again" : "Could not load keyfile. Please try again",
     "invalid_key" : "You haven´t selected a valid keyfile",
     "invalid_key_err" : "The selected private key is invalid. Choose a valid key or generate a new one",
     "load_key" : "The selected private key loaded successfully:" + "\n" + "\n",

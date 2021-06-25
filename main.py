@@ -3,6 +3,8 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from visualisation.ChoosePage import Ui_MainWindow
 from functionality import ModelPageFunctionality
 from functionality import SecureAddtionFunctionality
+from functionality import primes
+from functionality.primes import PrivateKey, PublicKey
 from functionality.SecurityValuesFunctionality import SecurityValuesFunctionality
 from functionality.SecureAddtionFunctionality import SecureAdditionFunctionality
 

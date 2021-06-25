@@ -12,7 +12,7 @@ class SecureAdditionFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
         super(SecureAdditionFunctionality, self).__init__(parent)
         self.setupUi(self)
         self.folder_path = ""
-        self.key_filepath = ""
+        self.private_key_filepath = ""
         self.private_key_name = ""
         self.public_key_name = ""
         self.pk = ""
@@ -62,7 +62,8 @@ class SecureAdditionFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
                 pk = str(pk.n)
                 print(pk)
                 pickle.dump(sk, open(self.private_key_name + "_sk.p", "wb"))
-                #pickle.dump(pk, open(self.private_key_name + "_pk.p", "wb"))
+                #with open(self.private_key_name + "_sk.p", "wb") as private_key:
+                #    private_key.write(sk)
                 with open(self.private_key_name + "_pk.p", "w") as pub_key:
                     pub_key.write(pk)
                 self.label.setText(Security_Page_func["key_succ"] + choosen_direc)
@@ -79,20 +80,23 @@ class SecureAdditionFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
         """
         file_dialog = QtWidgets.QFileDialog(self)
         keyfile = file_dialog.getOpenFileName(None, "Window Name", "")
-        self.key_filepath = keyfile[0]
-        self.pubkey_filepath = self.key_filepath.split("_")
+        self.private_key_filepath = keyfile[0]
+        self.pubkey_filepath = self.private_key_filepath.split("_")
         self.pubkey_filepath = "_".join(self.pubkey_filepath[:-1]) + "_pk.p"
         print(self.pubkey_filepath)
+        print(self.private_key_filepath)
 
         try:
-            pk = pickle.load(open(self.key_filepath, "rb"))
-            print("OK1")
-            pub_key = open(self.pubkey_filepath, "r")
-            self.pubkey_filepath = pub_key.read()
+            pk = pickle.load(open(self.private_key_filepath, "rb"))
+            try:
+                pub_key = open(self.pubkey_filepath, "r")
+                self.pubkey_filepath = pub_key.read()
+            except:
+                pub_key = open(self.pubkey_filepath, "rb")
+                self.pubkey_filepath = pub_key.read()
             print(self.pubkey_filepath)
-            print("OK2")
         except:
-            self.label_2.setText(Security_Page_func["pick_key_label"])
+            self.label_2.setText(Security_Page_func["pick_key_label_again"])
         else:
             if pk == "invalid":
                 self.label_2.setText(Security_Page_func["invalid_key"])
@@ -104,7 +108,7 @@ class SecureAdditionFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
             else:
                 self.pk = pk
                 self.label_2.setText(
-                    Security_Page_func["load_key"] + self.key_filepath)
+                    Security_Page_func["load_key"] + self.private_key_filepath)
 
 
     def decrypt(self):
