@@ -22,7 +22,7 @@ class SecurityValuesFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
         self.key_filepath = ""
         self.private_key_name = ""
         self.public_key_name = ""
-        self.pk = None
+        self.seckey = None
         self.hash_text = ""
         self.pushButton_2.clicked.connect(self.pick_key_filepath)
         self.pushButton_3.clicked.connect(self.sign_hash_btn)
@@ -87,11 +87,11 @@ class SecurityValuesFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
         self.key_filepath = keyfile[0]
 
         try:
-            pk = encryption_func.load_private_key(self.key_filepath)
+            sk = encryption_func.load_private_key(self.key_filepath)
         except:
             self.label_2.setText(Security_Page_func["pick_key_label"])
         else:
-            if pk == "invalid":
+            if sk == "invalid":
                 self.label_2.setText(Security_Page_func["invalid_key"])
                 error_dialog = QtWidgets.QErrorMessage()
                 error_dialog.setWindowTitle("Invalid private key")
@@ -99,7 +99,7 @@ class SecurityValuesFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
                     Security_Page_func["invalid_key_err"])
                 error_dialog.exec_()
             else:
-                self.pk = pk
+                self.seckey = sk
                 self.label_2.setText(
                     Security_Page_func["load_key"] + self.key_filepath)
 
@@ -118,12 +118,15 @@ class SecurityValuesFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
             error_dialog.showMessage(Security_Page_func["no_pk_hash_err"])
             error_dialog.exec_()
         elif len(hash_string) > 1:
-            signature = encryption_func.sign_hash(self.pk, hash_string)
-            signature_hex = signature.hex()
-            print(signature_hex)
-            print(type(signature))
-            self.textEdit_2.setText(signature_hex)
-            self.label_5.setText(Security_Page_func["hash_sign"])
+            try:
+                signature = encryption_func.sign_hash(self.pk, hash_string)
+                signature_hex = signature.hex()
+                print(signature_hex)
+                print(type(signature))
+                self.textEdit_2.setText(signature_hex)
+                self.label_5.setText(Security_Page_func["hash_sign"])
+            except:
+                self.label_5.setText("Error while signing the given Hash. Please try again.")
         else:
             error_dialog = QtWidgets.QErrorMessage()
             error_dialog.setWindowTitle("Invalid hash format")

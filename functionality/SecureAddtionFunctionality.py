@@ -15,7 +15,7 @@ class SecureAdditionFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
         self.private_key_filepath = ""
         self.private_key_name = ""
         self.public_key_name = ""
-        self.pk = ""
+        self.seckey = ""
         self.pubkey = ""
         self.pubkey_filepath = ""
         self.pushButton_5.clicked.connect(self.return_page)
@@ -53,15 +53,12 @@ class SecureAdditionFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
                 else:
                     self.private_key_name = choosen_direc + '/' + private_key_name[0]
                     self.public_key_name = choosen_direc + '/' + private_key_name[0]
-                    print(self.public_key_name + "_pk.p")
-                    print(self.private_key_name + "_sk.p")
+                    print("PublicKey Path : ", self.public_key_name + "_pk.p")
+                    print("PrivateKey Path : ", self.private_key_name + "_sk.p")
 
                 sk, pk = primes.generate_keypair(128)
-                print(type(sk))
-                print(sk)
-                print(type(pk.n))
                 pk = str(pk.n)
-                print(pk)
+
                 pickle.dump(sk, open(self.private_key_name + "_sk.p", "wb"))
                 with open(self.private_key_name + "_pk.p", "w") as pub_key:
                     pub_key.write(pk)
@@ -86,8 +83,8 @@ class SecureAdditionFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
         print(self.private_key_filepath)
 
         try:
-            pk = pickle.load(open(self.private_key_filepath, "rb"))
-            print("private_key loaded : ", pk)
+            private_key = pickle.load(open(self.private_key_filepath, "rb"))
+            print("private_key loaded : ", private_key)
             try:
                 pub_key = open(self.pubkey_filepath, "r")
                 self.pubkey = pub_key.read()
@@ -98,7 +95,7 @@ class SecureAdditionFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
         except:
             self.label_2.setText(Security_Page_func["pick_key_label_again"])
         else:
-            if pk == "invalid":
+            if private_key == "invalid":
                 self.label_2.setText(Security_Page_func["invalid_key"])
                 error_dialog = QtWidgets.QErrorMessage()
                 error_dialog.setWindowTitle("Invalid private key")
@@ -106,7 +103,7 @@ class SecureAdditionFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
                     Security_Page_func["invalid_key_err"])
                 error_dialog.exec_()
             else:
-                self.pk = pk
+                self.seckey = private_key
                 self.label_2.setText(
                     Security_Page_func["load_key"] + self.private_key_filepath)
 
@@ -126,15 +123,14 @@ class SecureAdditionFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
             error_dialog.showMessage(Security_Page_func["no_pk_hash_err"])
             error_dialog.exec_()
         elif len(encry_string) > 1:
-            self.pubkey = int(self.pubkey)
-            print(self.pubkey)
-            #print(int(encry_string))
 
-            #self.pubkey_filepath = primes.PublicKey.from_n(self.pubkey_filepath)
-
-            result = primes.decrypt_int(self.pk, self.pubkey, int(encry_string))
-            self.textEdit_2.setText("Number of patients decrypted: {}".format(result))
-            self.label_5.setText("Decryption was successfull")
+            try:
+                self.pubkey = int(self.pubkey)
+                result = primes.decrypt_int(self.pk, self.pubkey, int(encry_string))
+                self.textEdit_2.setText("Number of patients decrypted: {}".format(result))
+                self.label_5.setText("Decryption was successfull")
+            except:
+                self.label_5.setText("Decryption was unsuccessfull. Please check your inputs. ")
         else:
             error_dialog = QtWidgets.QErrorMessage()
             error_dialog.setWindowTitle("Invalid format")

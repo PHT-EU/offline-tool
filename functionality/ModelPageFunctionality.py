@@ -17,7 +17,7 @@ class ModelPageFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
         self.config_file_path = ("", "")
         self.key_filepath2 = ""
         self.model_direc = ""
-        self.pk1 = None
+        self.seckey = None
         self.direc_list = []
         self.file_list = []
         self.selpath = []
@@ -54,7 +54,7 @@ class ModelPageFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
 
         if self.encryp_key_path != "":
             self.label_2.setText(Model_Page_func["encry_key_func"] + self.encryp_key_path)
-            print(self.encryp_key_path)
+            print("Encrypted Key Path : ", self.encryp_key_path)
         else:
             self.label_2.setText(Model_Page_func["encry_key_error"])
 
@@ -72,8 +72,12 @@ class ModelPageFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
         self.config_file_path = config_file[0]
 
         if self.config_file_path != "":
-            config = encryption_func.load_config(self.config_file_path)
-            self.label_2.setText("Train-Config file got successfully loaded")
+
+            try:
+                config = encryption_func.load_config(self.config_file_path)
+                self.label_2.setText("Train-Config file got successfully loaded")
+            except:
+                self.label_2.setText("Error while loading Train-Config. Check your Input again.")
 
             try:
                 encryption_func.verify_digital_signature(config)
@@ -81,10 +85,13 @@ class ModelPageFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
             except:
                 self.label_2.setText("During the verification of the digital signatures did occur an mismatch error")
 
-            encry_sym_key = bytes.fromhex(config["user_encrypted_sym_key"])
-
-            self.encryp_key_path = encry_sym_key
-            self.label_2.setText("Train-Config file got successfully loaded & All signatures are valid & encrypted symmetric key got loaded")
+            try:
+                encry_sym_key = bytes.fromhex(config["user_encrypted_sym_key"])
+                self.encryp_key_path = encry_sym_key
+                self.label_2.setText("Train-Config file got successfully loaded & All signatures are valid & encrypted symmetric key got loaded")
+            except:
+                self.label_2.setText(
+                    "Encrypted Symmetric Key could not be transferred from the Train-Config. Please try again.")
 
 
 
@@ -99,12 +106,12 @@ class ModelPageFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
         self.key_filepath2 = keyfile2[0]
 
         try:
-            pk1 = encryption_func.load_private_key(self.key_filepath2)
+            sk1 = encryption_func.load_private_key(self.key_filepath2)
         except:
             self.label_3.setText(Model_Page_func["pk_except"])
         else:
 
-            if pk1 == "invalid":
+            if sk1 == "invalid":
                 self.label_3.setText(Model_Page_func["pk_error_label"])
                 error_dialog = QtWidgets.QErrorMessage()
                 error_dialog.setWindowTitle("Invalid private key")
@@ -112,8 +119,8 @@ class ModelPageFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
                     Model_Page_func["pk_error_msg"])
                 error_dialog.exec_()
             else:
-                self.pk1 = pk1
-                print(self.pk1)
+                self.seckey = sk1
+                print("PrivateKey : ", self.seckey)
                 self.label_3.setText(
                     Model_Page_func["pk_suc_label"] + self.key_filepath2)
 
