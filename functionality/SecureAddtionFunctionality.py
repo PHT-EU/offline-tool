@@ -56,13 +56,16 @@ class SecureAdditionFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
                     print("PublicKey Path : ", self.public_key_name + "_pk.p")
                     print("PrivateKey Path : ", self.private_key_name + "_sk.p")
 
-                sk, pk = primes.generate_keypair(128)
-                pk = str(pk.n)
+                try:
+                    sk, pk = primes.generate_keypair(128)
+                    pk = str(pk.n)
 
-                pickle.dump(sk, open(self.private_key_name + "_sk.p", "wb"))
-                with open(self.private_key_name + "_pk.p", "w") as pub_key:
-                    pub_key.write(pk)
-                self.label.setText(Security_Page_func["key_succ"] + choosen_direc)
+                    pickle.dump(sk, open(self.private_key_name + "_sk.p", "wb"))
+                    with open(self.private_key_name + "_pk.p", "w") as pub_key:
+                        pub_key.write(pk)
+                    self.label.setText(Security_Page_func["key_succ"] + choosen_direc)
+                except:
+                    self.label.setText("Error while generating keys, Please try again.")
 
         else:
             self.label.setText(Security_Page_func["key_err"])

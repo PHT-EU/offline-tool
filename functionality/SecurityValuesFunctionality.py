@@ -68,9 +68,13 @@ class SecurityValuesFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
 
 
 
-                rsa_sk, rsa_pk = encryption_func.create_rsa_keys()
-                encryption_func.store_keys(self.folder_path, rsa_sk, rsa_pk,  private_key_name[0])
-                self.label.setText(Security_Page_func["key_succ"] + choosen_direc)
+                try:
+                    rsa_sk, rsa_pk = encryption_func.create_rsa_keys()
+                    encryption_func.store_keys(self.folder_path, rsa_sk, rsa_pk,  private_key_name[0])
+                    self.label.setText(Security_Page_func["key_succ"] + choosen_direc)
+                except:
+                    self.label.setText(Security_Page_func["key_err"])
+
 
         else:
             self.label.setText(Security_Page_func["key_err"])
@@ -139,6 +143,7 @@ class SecurityValuesFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
         :param
         :return:
         """
+
         textboxValue2 = self.textEdit_2.toPlainText()
         clipboard = QApplication.clipboard()
         clipboard.clear(mode=clipboard.Clipboard)
