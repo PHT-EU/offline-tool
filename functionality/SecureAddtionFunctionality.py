@@ -11,32 +11,32 @@ class SecureAdditionFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
     def __init__(self, parent=None):
         super(SecureAdditionFunctionality, self).__init__(parent)
         self.setupUi(self)
-        self.folder_path = ""
+        self.key_dir = ""
         self.private_key_filepath = ""
+        self.public_key_filepath = ""
         self.private_key_name = ""
         self.public_key_name = ""
-        self.seckey = ""
-        self.pubkey = ""
-        self.pubkey_filepath = ""
+        self.private_key = ""
+        self.public_key = ""
         self.pushButton_5.clicked.connect(self.return_page)
         self.pushButton.clicked.connect(self.generate_key_pair)
-        self.pushButton_2.clicked.connect(self.pick_key_filepath)
+        self.pushButton_2.clicked.connect(self.pick_private_key_filepath)
         self.pushButton_3.clicked.connect(self.decrypt)
 
 
 
     def browse_direc(self):
         choosen_direc = QtWidgets.QFileDialog.getExistingDirectory(self)
-        self.folder_path = choosen_direc
-        print(self.folder_path)
+        self.keydir_path = choosen_direc
+        print(self.keydir_path)
 
 
 
     def generate_key_pair(self):
-        choosen_direc = QtWidgets.QFileDialog.getExistingDirectory(self)
-        self.folder_path = choosen_direc
+        chosen_dir = QtWidgets.QFileDialog.getExistingDirectory(self)
+        self.key_dir = chosen_dir
 
-        if self.folder_path != "":
+        if self.key_dir != "":
             private_key_name = QtWidgets.QInputDialog.getText(self, Security_Page_func["key_name_title"],
                                                               Security_Page_func["key_name_msg"])
 
@@ -51,19 +51,19 @@ class SecureAdditionFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
                     private_key_name = QtWidgets.QInputDialog.getText(self, Security_Page_func["key_name_title"],
                                                                       Security_Page_func["key_name_msg"])
                 else:
-                    self.private_key_name = choosen_direc + '/' + private_key_name[0]
-                    self.public_key_name = choosen_direc + '/' + private_key_name[0]
+                    self.private_key_name = chosen_dir + '/' + private_key_name[0]
+                    self.public_key_name = chosen_dir + '/' + private_key_name[0]
                     print("PublicKey Path : ", self.public_key_name + "_pk.p")
                     print("PrivateKey Path : ", self.private_key_name + "_sk.p")
 
                 try:
-                    sk, pk = primes.generate_keypair(128)
-                    pk = str(pk.n)
+                    private_key, public_key = primes.generate_keypair(128)
+                    public_key = str(public_key.n)
 
-                    pickle.dump(sk, open(self.private_key_name + "_sk.p", "wb"))
-                    with open(self.private_key_name + "_pk.p", "w") as pub_key:
-                        pub_key.write(pk)
-                    self.label.setText(Security_Page_func["key_succ"] + choosen_direc)
+                    pickle.dump(private_key, open(self.private_key_name + "_sk.p", "wb"))
+                    with open(self.private_key_name + "_pk.p", "w") as key:
+                        key.write(public_key)
+                    self.label.setText(Security_Page_func["key_succ"] + chosen_dir)
                 except:
                     self.label.setText("Error while generating keys, Please try again.")
 
@@ -71,34 +71,34 @@ class SecureAdditionFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
             self.label.setText(Security_Page_func["key_err"])
 
 
-    def pick_key_filepath(self):
+    def pick_private_key_filepath(self):
         """
         Choose a key-file in the corresponding directory that will then be saved into a global variable
         :param
         :return:
         """
         file_dialog = QtWidgets.QFileDialog(self)
-        keyfile = file_dialog.getOpenFileName(None, "Window Name", "")
-        self.private_key_filepath = keyfile[0]
-        self.pubkey_filepath = self.private_key_filepath.split("_")
-        self.pubkey_filepath = "_".join(self.pubkey_filepath[:-1]) + "_pk.p"
-        print(self.pubkey_filepath)
+        private_keyfile = file_dialog.getOpenFileName(None, "Window Name", "")
+        self.private_key_filepath = private_keyfile[0]
+        self.public_key_filepath = self.private_key_filepath.split("_")
+        self.public_key_filepath = "_".join(self.public_key_filepath[:-1]) + "_pk.p"
+        print(self.public_key_filepath)
         print(self.private_key_filepath)
 
         try:
-            private_key = pickle.load(open(self.private_key_filepath, "rb"))
-            print("private_key loaded : ", private_key)
+            self.private_key = pickle.load(open(self.private_key_filepath, "rb"))
+            print("private_key loaded : ", self.private_key)
             try:
-                pub_key = open(self.pubkey_filepath, "r")
-                self.pubkey = pub_key.read()
+                public_key = open(self.public_key_filepath, "r")
+                self.public_key = public_key.read()
             except:
-                pub_key = pickle.load(open(self.pubkey_filepath, "rb"))
-                print("public_key loaded :", pub_key)
-                self.pubkey = pub_key.n
+                public_key = pickle.load(open(self.public_key_filepath, "rb"))
+                print("public_key loaded :", public_key)
+                self.public_key = public_key.n
         except:
             self.label_2.setText(Security_Page_func["pick_key_label_again"])
         else:
-            if private_key == "invalid":
+            if self.private_key == "invalid":
                 self.label_2.setText(Security_Page_func["invalid_key"])
                 error_dialog = QtWidgets.QErrorMessage()
                 error_dialog.setWindowTitle("Invalid private key")
@@ -106,7 +106,6 @@ class SecureAdditionFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
                     Security_Page_func["invalid_key_err"])
                 error_dialog.exec_()
             else:
-                self.seckey = private_key
                 self.label_2.setText(
                     Security_Page_func["load_key"] + self.private_key_filepath)
 
@@ -117,27 +116,31 @@ class SecureAdditionFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
         :param
         :return: signed-hash in hex-format
         """
-        encry_string = self.textEdit.toPlainText().rstrip().lstrip()
+        encrypted_string = self.textEdit.toPlainText().rstrip().lstrip()
 
 
-        if self.pk is None:
+        if self.private_key is None:
             error_dialog = QtWidgets.QErrorMessage()
             error_dialog.setWindowTitle("Private key missing")
             error_dialog.showMessage(Security_Page_func["no_pk_hash_err"])
             error_dialog.exec_()
-        elif len(encry_string) > 1:
+        elif len(encrypted_string) > 1:
 
             try:
-                self.pubkey = int(self.pubkey)
-                result = primes.decrypt_int(self.pk, self.pubkey, int(encry_string))
+                self.public_key = int(self.public_key)
+                result = primes.decrypt_int(self.private_key, self.public_key, int(encrypted_string))
                 self.textEdit_2.setText("Number of patients decrypted: {}".format(result))
                 self.label_5.setText("Decryption was successfull")
             except:
-                self.label_5.setText("Decryption was unsuccessfull. Please check your inputs. ")
+                error_dialog = QtWidgets.QErrorMessage()
+                error_dialog.setWindowTitle("Invalid format")
+                error_dialog.showMessage("Encrypted Count Query not in the right format. Please check your input.")
+                error_dialog.exec_()
+
         else:
             error_dialog = QtWidgets.QErrorMessage()
             error_dialog.setWindowTitle("Invalid format")
-            error_dialog.showMessage(Security_Page_func["invalid_hash"])
+            error_dialog.showMessage("Encrypted Count Query not in the right format. Please check your input.")
             error_dialog.exec_()
 
 

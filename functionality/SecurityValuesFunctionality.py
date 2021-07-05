@@ -18,22 +18,22 @@ class SecurityValuesFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
     def __init__(self, parent=None):
         super(SecurityValuesFunctionality, self).__init__(parent)
         self.setupUi(self)
-        self.folder_path = ""
-        self.key_filepath = ""
+        self.dir_path = ""
+        self.private_key_filepath = ""
         self.private_key_name = ""
         self.public_key_name = ""
-        self.seckey = None
+        self.private_key = None
         self.hash_text = ""
-        self.pushButton_2.clicked.connect(self.pick_key_filepath)
-        self.pushButton_3.clicked.connect(self.sign_hash_btn)
+        self.pushButton_2.clicked.connect(self.pick_private_key_filepath)
+        self.pushButton_3.clicked.connect(self.sign_hash)
         self.pushButton.clicked.connect(self.generate_private_key)
         self.pushButton_5.clicked.connect(self.return_page)
         self.pushButton_4.clicked.connect(self.copy_hash)
 
     def browse_direc(self):
-        choosen_direc = QtWidgets.QFileDialog.getExistingDirectory(self)
-        self.folder_path = choosen_direc
-        print(self.folder_path)
+        chosen_direc = QtWidgets.QFileDialog.getExistingDirectory(self)
+        self.dir_path = chosen_direc
+        print(self.dir_path)
 
     def generate_private_key(self):
         """
@@ -42,10 +42,10 @@ class SecurityValuesFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
         :param
         :return:
         """
-        choosen_direc = QtWidgets.QFileDialog.getExistingDirectory(self)
-        self.folder_path = choosen_direc
+        chosen_direc = QtWidgets.QFileDialog.getExistingDirectory(self)
+        self.dir_path = chosen_direc
 
-        if self.folder_path != "":
+        if self.dir_path != "":
 
             private_key_name = QtWidgets.QInputDialog.getText(self, Security_Page_func["key_name_title"],
                                                               Security_Page_func["key_name_msg"])
@@ -61,17 +61,17 @@ class SecurityValuesFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
                     private_key_name = QtWidgets.QInputDialog.getText(self, Security_Page_func["key_name_title"],
                                                                       Security_Page_func["key_name_msg"])
                 else:
-                    self.private_key_name = choosen_direc + '/' + private_key_name[0]
-                    self.public_key_name = choosen_direc + '/' + private_key_name[0]
+                    self.private_key_name = chosen_direc + '/' + private_key_name[0]
+                    self.public_key_name = chosen_direc + '/' + private_key_name[0]
                     print(self.public_key_name + "_pk.pem")
                     print(self.private_key_name + "_sk.pem")
 
 
 
                 try:
-                    rsa_sk, rsa_pk = encryption_func.create_rsa_keys()
-                    encryption_func.store_keys(self.folder_path, rsa_sk, rsa_pk,  private_key_name[0])
-                    self.label.setText(Security_Page_func["key_succ"] + choosen_direc)
+                    rsa_private_key, rsa_public_key = encryption_func.create_rsa_keys()
+                    encryption_func.store_keys(self.dir_path, rsa_private_key, rsa_public_key,  private_key_name[0])
+                    self.label.setText(Security_Page_func["key_succ"] + chosen_direc)
                 except:
                     self.label.setText(Security_Page_func["key_err"])
 
@@ -80,7 +80,7 @@ class SecurityValuesFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
             self.label.setText(Security_Page_func["key_err"])
 
 
-    def pick_key_filepath(self):
+    def pick_private_key_filepath(self):
         """
         Choose a key-file in the corresponding directory that will then be saved into a global variable
         :param
@@ -88,49 +88,54 @@ class SecurityValuesFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
         """
         file_dialog = QtWidgets.QFileDialog(self)
         keyfile = file_dialog.getOpenFileName(None, "Window Name", "")
-        self.key_filepath = keyfile[0]
+        self.private_key_filepath = keyfile[0]
 
         try:
-            sk = encryption_func.load_private_key(self.key_filepath)
+            private_key = encryption_func.load_private_key(self.private_key_filepath)
+            self.private_key = private_key
         except:
             self.label_2.setText(Security_Page_func["pick_key_label"])
-        else:
-            if sk == "invalid":
-                self.label_2.setText(Security_Page_func["invalid_key"])
-                error_dialog = QtWidgets.QErrorMessage()
-                error_dialog.setWindowTitle("Invalid private key")
-                error_dialog.showMessage(
-                    Security_Page_func["invalid_key_err"])
-                error_dialog.exec_()
-            else:
-                self.seckey = sk
-                self.label_2.setText(
-                    Security_Page_func["load_key"] + self.key_filepath)
 
-    def sign_hash_btn(self):
+        if self.private_key == "invalid":
+            self.label_2.setText(Security_Page_func["invalid_key"])
+            error_dialog = QtWidgets.QErrorMessage()
+            error_dialog.setWindowTitle("Invalid private key")
+            error_dialog.showMessage(
+                Security_Page_func["invalid_key_err"])
+            error_dialog.exec_()
+        else:
+            self.label_2.setText(
+                Security_Page_func["load_key"] + self.private_key_filepath)
+
+    def sign_hash(self):
         """
         Signs a given hash (SHA512-format) with the before loaded private key
         :param
         :return: signed-hash in hex-format
         """
         hash_string = self.textEdit.toPlainText().rstrip().lstrip()
-        hash_string = bytes.fromhex(hash_string)
 
-        if self.pk is None:
+        try:
+            hash_string = bytes.fromhex(hash_string)
+        except:
+            None
+
+        if self.private_key is None:
             error_dialog = QtWidgets.QErrorMessage()
             error_dialog.setWindowTitle("Private key missing")
             error_dialog.showMessage(Security_Page_func["no_pk_hash_err"])
             error_dialog.exec_()
         elif len(hash_string) > 1:
             try:
-                signature = encryption_func.sign_hash(self.pk, hash_string)
+                signature = encryption_func.sign_hash(self.private_key, hash_string)
                 signature_hex = signature.hex()
-                print(signature_hex)
-                print(type(signature))
                 self.textEdit_2.setText(signature_hex)
                 self.label_5.setText(Security_Page_func["hash_sign"])
             except:
-                self.label_5.setText("Error while signing the given Hash. Please try again.")
+                error_dialog = QtWidgets.QErrorMessage()
+                error_dialog.setWindowTitle("Invalid hash format")
+                error_dialog.showMessage(Security_Page_func["invalid_hash"])
+                error_dialog.exec_()
         else:
             error_dialog = QtWidgets.QErrorMessage()
             error_dialog.setWindowTitle("Invalid hash format")
@@ -144,10 +149,10 @@ class SecurityValuesFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
         :return:
         """
 
-        textboxValue2 = self.textEdit_2.toPlainText()
+        textbox_hash = self.textEdit_2.toPlainText()
         clipboard = QApplication.clipboard()
         clipboard.clear(mode=clipboard.Clipboard)
-        clipboard.setText(textboxValue2, mode=clipboard.Clipboard)
+        clipboard.setText(textbox_hash, mode=clipboard.Clipboard)
 
     def return_page(self):
         self.Choose_Page_Frame = main.ChoosePageFunctionality()

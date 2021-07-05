@@ -197,7 +197,7 @@ class Ui_MainWindow(object):
         self.pushButton_4.setText(_translate("MainWindow", "Decrypt selected models"))
         self.pushButton_6.setText(_translate("MainWindow", "Show decrypted files"))
         self.pushButton_5.setText(_translate("MainWindow", "Return "))
-        self.label_2.setText(_translate("MainWindow", "No key file selected"))
+        self.label_2.setText(_translate("MainWindow", "No train config selected"))
         self.pushButton_3.setText(_translate("MainWindow", "Pick and load private key"))
         self.pushButton_2.setText(_translate("MainWindow", "Select train_config.json"))
         self.label_3.setText(_translate("MainWindow", "No private key selected yet"))
