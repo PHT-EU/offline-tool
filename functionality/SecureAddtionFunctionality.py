@@ -82,18 +82,14 @@ class SecureAdditionFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
         self.private_key_filepath = private_keyfile[0]
         self.public_key_filepath = self.private_key_filepath.split("_")
         self.public_key_filepath = "_".join(self.public_key_filepath[:-1]) + "_pk.p"
-        print(self.public_key_filepath)
-        print(self.private_key_filepath)
 
         try:
             self.private_key = pickle.load(open(self.private_key_filepath, "rb"))
-            print("private_key loaded : ", self.private_key)
             try:
                 public_key = open(self.public_key_filepath, "r")
                 self.public_key = public_key.read()
             except:
                 public_key = pickle.load(open(self.public_key_filepath, "rb"))
-                print("public_key loaded :", public_key)
                 self.public_key = public_key.n
         except:
             self.label_2.setText(Security_Page_func["pick_key_label_again"])

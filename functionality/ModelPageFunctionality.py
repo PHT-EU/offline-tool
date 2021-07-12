@@ -1,5 +1,5 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
-#from fbs_runtime.application_context.PyQt5 import ApplicationContext
+# from fbs_runtime.application_context.PyQt5 import ApplicationContext
 from collections import OrderedDict
 from visualisation.ModelPage import Ui_MainWindow
 from visualisation.label_dictionary import Model_Page_func
@@ -7,13 +7,14 @@ from pathlib import Path
 from functionality import encryption_func
 import sys, platform, subprocess, ntpath, main, os
 import pickle
+from cryptography.exceptions import InvalidSignature
 
 
 class ModelPageFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
     def __init__(self, parent=None):
         super(ModelPageFunctionality, self).__init__(parent)
         self.setupUi(self)
-        self.encrypted_key_path = ("", "")
+        self.encrypted_key = None
         self.config_file_path = ("", "")
         self.model_dir = ""
         self.private_key_path = ""
@@ -24,7 +25,6 @@ class ModelPageFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
         self.index_list = []
         self.counter = 0
         self.decryption_process = 0
-
 
         self.pushButton_5.clicked.connect(self.move_return_page)
         self.pushButton_2.clicked.connect(self.load_train_config)
@@ -59,8 +59,6 @@ class ModelPageFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
         else:
             self.label_2.setText(Model_Page_func["encry_key_error"])
 
-
-
     def load_train_config(self):
         """
         Saves path of train_config.json in a global variable through file system selection
@@ -76,25 +74,34 @@ class ModelPageFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
 
             try:
                 config = encryption_func.load_config(self.config_file_path)
-                self.label_2.setText("Train-Config file got successfully loaded")
-            except:
-                self.label_2.setText("Error while loading Train-Config. Check your Input again.")
+                self.label_2.setText(Model_Page_func["config_succ_load"])
 
-            try:
-                encryption_func.verify_digital_signature(config)
-                self.label_2.setText("Train-Config file got successfully loaded & All signatures are valid")
-            except:
-                self.label_2.setText("During the verification of the digital signatures did occur a mismatch error")
+                try:
+                    encryption_func.verify_digital_signature(config)
+                    self.label_2.setText(Model_Page_func["config_succ_sign"])
+                except ValueError as e:
+                    self.label_2.setText(f"Error verifying signature:\n {e}")
+                except InvalidSignature as e:
+                    self.label_2.setText(f"Error verifying signature:\n {e}")
+                except:
+                    self.label_2.setText(Model_Page_func["config_failed_sign"])
+                    return None
 
+            except:
+                self.label_2.setText(Model_Page_func["config_failed_load"])
+                error_dialog = QtWidgets.QErrorMessage()
+                error_dialog.setWindowTitle("Error while loading config file")
+                error_dialog.showMessage(
+                    Model_Page_func["config_failed_load"])
+                error_dialog.exec_()
+                return None
             try:
-                encry_sym_key = bytes.fromhex(config["user_encrypted_sym_key"])
-                self.encryp_key_path = encry_sym_key
-                self.label_2.setText("Train-Config file got successfully loaded & All signatures are valid & encrypted symmetric key got loaded")
+                self.encrypted_key = bytes.fromhex(config["user_encrypted_sym_key"])
+                self.label_2.setText(
+                    Model_Page_func["config_encry_key_succ"])
             except:
                 self.label_2.setText(
-                    "Encrypted Symmetric Key could not be transferred from the Train-Config. Please try again.")
-
-
+                    Model_Page_func["config_encry_key_failed"])
 
     def select_private_key(self):
         """
@@ -105,19 +112,27 @@ class ModelPageFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
         file_dialog = QtWidgets.QFileDialog(self)
         keyfile2 = file_dialog.getOpenFileName(None, "Window Name", "")
         self.private_key_path = keyfile2[0]
+        private_key_psw = QtWidgets.QInputDialog.getText(self, "Password for Private Key",
+                                                         "Enter the existing password for your Private Key:")
 
         try:
-            self.private_key = encryption_func.load_private_key(self.private_key_path)
+            self.private_key = encryption_func.load_private_key(self.private_key_path, private_key_psw)
         except:
-            self.label_3.setText(Model_Page_func["pk_except"])
+            self.label_3.setText("Error while loading private key: Invalid Input")
         else:
-
             if self.private_key == "invalid":
                 self.label_3.setText(Model_Page_func["pk_error_label"])
                 error_dialog = QtWidgets.QErrorMessage()
-                error_dialog.setWindowTitle("Invalid private key")
+                error_dialog.setWindowTitle("Error while loading Private key")
                 error_dialog.showMessage(
                     Model_Page_func["pk_error_msg"])
+                error_dialog.exec_()
+            elif self.private_key == "wrong_password":
+                self.label_3.setText(Model_Page_func["pk_error_label_2"])
+                error_dialog = QtWidgets.QErrorMessage()
+                error_dialog.setWindowTitle("Error while loading Private key")
+                error_dialog.showMessage(
+                    Model_Page_func["pk_error_msg_2"])
                 error_dialog.exec_()
             else:
                 print("PrivateKey : ", self.private_key)
@@ -162,7 +177,6 @@ class ModelPageFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
                 self.dir_list.append(id)
 
         self.dir_list = sorted(self.dir_list, key=str.lower)
-        print("directory list", self.dir_list)
 
         if self.model_dir != "":
 
@@ -213,25 +227,21 @@ class ModelPageFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
 
         self.file_list = self.get_filepaths_of_dir(self.model_dir)
         if self.listWidget.currentRow() not in self.index_list:
-           self.index_list.append(self.listWidget.currentRow())
+            self.index_list.append(self.listWidget.currentRow())
         elif self.listWidget.currentRow() in self.index_list:
             self.index_list.remove(self.listWidget.currentRow())
 
-        print("index list2", self.index_list)
 
         if len(self.index_list) == 0:
             self.label_5.setText(Model_Page_func["model_label"])
         else:
             self.selected_path = [self.file_list[x] for x in self.index_list]
-            print("Selected_Path :", self.selected_path)
             model_string = "Selected models:"
             for path in self.selected_path:
                 path = self.path_leaf(path)
                 model_string += ("\n" + "\n" + path)
 
             self.label_5.setText(model_string)
-
-
 
     def decrypt_models(self):
         """
@@ -247,44 +257,38 @@ class ModelPageFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
             error_dialog.setWindowTitle("Missing Private Key")
             error_dialog.showMessage(Model_Page_func["missing_pk_msg"])
             error_dialog.exec_()
+        elif self.encrypted_key == None:
+            error_dialog = QtWidgets.QErrorMessage()
+            error_dialog.setWindowTitle("Missing Encrypted Key")
+            error_dialog.showMessage("Missing Encrypted Key. Please load your Config file before decrypting.")
+            error_dialog.exec_()
         else:
             try:
-                decrypted_sym_key = encryption_func.decrypt_symmetric_key(self.encrypted_key_path, self.private_key)
-                print("sym key decrypted")
+                decrypted_sym_key = encryption_func.decrypt_symmetric_key(self.encrypted_key, self.private_key)
                 file_encryptor = encryption_func.FileEncryptor(decrypted_sym_key)
                 decrypted_models = encryption_func.decrypt_models(selected_models, decrypted_sym_key)
-                print("models decrypted")
             except:
                 error_dialog = QtWidgets.QErrorMessage()
                 error_dialog.setWindowTitle("Invalid Private Key selected")
                 error_dialog.showMessage(
                     Model_Page_func["mismatch_pk"])
                 error_dialog.exec_()
+                self.label_5.setText(Model_Page_func["mismatch_pk"])
+                return None
             try:
                 for i in range(len(selected_models)):
                     path_file = os.path.split(selected_models[i])
-                    save_name = path_file[0] + '/decrypted_'
-                    print(save_name)
-                    if '.pkl' in selected_models[i]:
-                        print("1st case : .pkl")
-                        save_name += path_file[1][:-3] + 'txt'
-                        with open(save_name, "w") as decr_model:
-                            decr_model.write(str(pickle.loads(decrypted_models[i])))
-                    elif ".pdf" in selected_models[i]:
-                        print("2nd case : .pdf")
-                        save_name += path_file[1][:-3] + 'pdf'
-                        with open(save_name, "wb") as decr_model:
-                            decr_model.write(decrypted_models[i])
-                    elif ".png" in selected_models[i]:
-                        print("3rd case : .png")
-                        save_name += path_file[1][:-3] + 'png'
-                        with open(save_name, "wb") as decr_model:
-                            decr_model.write(decrypted_models[i])
+                    save_name = path_file[0] + '/decrypted_' + path_file[1][:]
+                    with open(save_name, "wb") as decr_model:
+                        decr_model.write(decrypted_models[i])
             except:
                 error_dialog = QtWidgets.QErrorMessage()
-                error_dialog.setWindowTitle("Error during saving process of decrypted files")
-            self.decryption_process = 1
-            self.label_5.setText(Model_Page_func["decry_succ"])
+                error_dialog.setWindowTitle("Error Saving Decrypted Files")
+                error_dialog.showMessage("Error while trying to save the decrypted files locally.")
+                return None
+            else:
+                self.decryption_process = 1
+                self.label_5.setText(Model_Page_func["decry_succ"])
 
     def show_decrypted_files(self):
         """
@@ -295,11 +299,11 @@ class ModelPageFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
         if self.decryption_process == 1:
 
             if platform.system() == "Windows":
-                os.startfile(self.model_direc)
+                os.startfile(self.model_dir)
             elif platform.system() == "Darwin":
-                subprocess.Popen(["open", self.model_direc])
+                subprocess.Popen(["open", self.model_dir])
             else:
-                subprocess.Popen(["xdg-open", self.model_direc])
+                subprocess.Popen(["xdg-open", self.model_dir])
 
         else:
             error_dialog = QtWidgets.QErrorMessage()

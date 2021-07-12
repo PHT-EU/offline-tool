@@ -5,7 +5,7 @@ from visualisation.SecurityValues import Ui_MainWindow
 #import ModelPageFunctionality
 from functionality import encryption_func
 import main, platform
-from visualisation.label_dictionary import Security_Page_func
+from visualisation.label_dictionary import Security_Page_func, Model_Page_func
 import re
 
 from cryptography.hazmat.backends import default_backend
@@ -33,7 +33,6 @@ class SecurityValuesFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
     def browse_direc(self):
         chosen_direc = QtWidgets.QFileDialog.getExistingDirectory(self)
         self.dir_path = chosen_direc
-        print(self.dir_path)
 
     def generate_private_key(self):
         """
@@ -50,6 +49,9 @@ class SecurityValuesFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
             private_key_name = QtWidgets.QInputDialog.getText(self, Security_Page_func["key_name_title"],
                                                               Security_Page_func["key_name_msg"])
 
+            private_key_psw = QtWidgets.QInputDialog.getText(self, "Password for Private Key",
+                                                              "Enter the password for your Private Key:")
+
             if private_key_name[0] != "":
 
                 while re.match(r'^[A-Za-z0-9_]+$', private_key_name[0]) is False:
@@ -63,13 +65,11 @@ class SecurityValuesFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
                 else:
                     self.private_key_name = chosen_direc + '/' + private_key_name[0]
                     self.public_key_name = chosen_direc + '/' + private_key_name[0]
-                    print(self.public_key_name + "_pk.pem")
-                    print(self.private_key_name + "_sk.pem")
 
 
 
                 try:
-                    rsa_private_key, rsa_public_key = encryption_func.create_rsa_keys()
+                    rsa_private_key, rsa_public_key = encryption_func.create_rsa_keys(private_key_psw)
                     encryption_func.store_keys(self.dir_path, rsa_private_key, rsa_public_key,  private_key_name[0])
                     self.label.setText(Security_Page_func["key_succ"] + chosen_direc)
                 except:
@@ -77,7 +77,7 @@ class SecurityValuesFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
 
 
         else:
-            self.label.setText(Security_Page_func["key_err"])
+            self.label.setText(Security_Page_func["dir_err"])
 
 
     def pick_private_key_filepath(self):
@@ -90,22 +90,32 @@ class SecurityValuesFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
         keyfile = file_dialog.getOpenFileName(None, "Window Name", "")
         self.private_key_filepath = keyfile[0]
 
-        try:
-            private_key = encryption_func.load_private_key(self.private_key_filepath)
-            self.private_key = private_key
-        except:
-            self.label_2.setText(Security_Page_func["pick_key_label"])
+        private_key_psw = QtWidgets.QInputDialog.getText(self, "Password for Private Key",
+                                                         "Enter the existing password for your Private Key:")
 
-        if self.private_key == "invalid":
-            self.label_2.setText(Security_Page_func["invalid_key"])
-            error_dialog = QtWidgets.QErrorMessage()
-            error_dialog.setWindowTitle("Invalid private key")
-            error_dialog.showMessage(
-                Security_Page_func["invalid_key_err"])
-            error_dialog.exec_()
+        try:
+            self.private_key = encryption_func.load_private_key(self.private_key_filepath, private_key_psw)
+        except:
+            self.label_2.setText("Error while loading private key: Invalid Input")
         else:
-            self.label_2.setText(
-                Security_Page_func["load_key"] + self.private_key_filepath)
+            if self.private_key == "invalid":
+                self.label_2.setText(Model_Page_func["pk_error_label"])
+                error_dialog = QtWidgets.QErrorMessage()
+                error_dialog.setWindowTitle("Error while loading Private key")
+                error_dialog.showMessage(
+                    Model_Page_func["pk_error_msg"])
+                error_dialog.exec_()
+            elif self.private_key == "wrong_password":
+                self.label_2.setText(Model_Page_func["pk_error_label_2"])
+                error_dialog = QtWidgets.QErrorMessage()
+                error_dialog.setWindowTitle("Error while loading Private key")
+                error_dialog.showMessage(
+                    Model_Page_func["pk_error_msg_2"])
+                error_dialog.exec_()
+            else:
+                print("PrivateKey : ", self.private_key)
+                self.label_2.setText(
+                    Model_Page_func["pk_suc_label"] + self.private_key_filepath)
 
     def sign_hash(self):
         """
@@ -118,7 +128,7 @@ class SecurityValuesFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
         try:
             hash_string = bytes.fromhex(hash_string)
         except:
-            None
+            self.label_5.setText("Error with the hash. Please check your input.")
 
         if self.private_key is None:
             error_dialog = QtWidgets.QErrorMessage()

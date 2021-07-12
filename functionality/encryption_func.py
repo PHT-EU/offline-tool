@@ -44,31 +44,32 @@ class FileEncryptor:
                 ef.write(decr_file)
             print("Done")
 
-def create_rsa_keys():
+
+def create_rsa_keys(password: str):
     """
     Generates a rsa private public key pair and returns their byte representation
-    :return:
+    :return: rsa_private_key_pem
+    :return: rsa_public_key_pem
     """
-    print("Test create")
+
     private_key = rsa.generate_private_key(
         public_exponent=65537,
         key_size=2048,
         backend=default_backend()
     )
-    # TODO maybe use a password for storing the private key -> more user security
     private_key_pem = private_key.private_bytes(encoding=serialization.Encoding.PEM,
                                                 format=serialization.PrivateFormat.PKCS8,
-                                                encryption_algorithm=serialization.NoEncryption()
-                                                )
+                                                encryption_algorithm=serialization.BestAvailableEncryption(str.encode(password[0])))
+
     public_key = private_key.public_key()
     public_key_pem = public_key.public_bytes(encoding=serialization.Encoding.PEM,
                                              format=serialization.PublicFormat.SubjectPublicKeyInfo)
     public_key_pem = public_key_pem.hex()
-    print(type(public_key_pem))
+
     return private_key_pem, public_key_pem
 
 
-def store_keys(path, rsa_private_key_pem,rsa_public_key_pem, name):
+def store_keys(path: str, rsa_private_key_pem, rsa_public_key_pem, name):
     """
     Stores the given keys at the specified path
     :param path:
@@ -76,41 +77,47 @@ def store_keys(path, rsa_private_key_pem,rsa_public_key_pem, name):
     :param rsa_public_key_pem:
     :return:
     """
-    print("Test store")
+
     with open(os.path.join(path, name + "_sk.pem"), "wb") as sk:
         sk.write(rsa_private_key_pem)
         print("Wrote " + name + " to " + path)
     with open(os.path.join(path, name + "_pk.pem"), "w") as pk:
-        print(type(pk))
-        print(type(rsa_public_key_pem))
         pk.write(rsa_public_key_pem)
         print("Wrote " + name + " to " + path)
 
 
-def load_private_key(path):
+def load_private_key(path: str, password: str):
     """
     Loads a private key from the given path
     :param path:
     :return:
     """
-    print(path)
+
     with open(path, "rb") as key:
         try:
-            private_key = serialization.load_pem_private_key(key.read(),
-                                                             password=None,
-                                                             backend=default_backend())
+            if password[0] != "":
+                try:
+                    private_key = serialization.load_pem_private_key(key.read(),
+                                                                     password=str.encode(password[0]),
+                                                                     backend=default_backend())
+                except:
+                    private_key = "wrong_password"
+                    return private_key
+            else:
+                private_key = serialization.load_pem_private_key(key.read(),
+                                                                 password=None,
+                                                                 backend=default_backend())
         except:
             private_key = "invalid"
             return private_key
         else:
-            print("Key successfully loaded")
             return private_key
 
 
-def sign_hash(private_key, hash):
+def sign_hash(private_key: rsa.RSAPrivateKey, hash: bytes):
     """
     Creates an ecc signature using the provided private key and hash
-    :param rsa: rsa private key
+    :param private_key: rsa private key
     :param hash: hash as byte object
     :return: DER encoded byte object representing the signature
     """
@@ -123,11 +130,11 @@ def sign_hash(private_key, hash):
     return signature
 
 
-def decrypt_symmetric_key(encrypted_sym_key, private_key):
+def decrypt_symmetric_key(encrypted_sym_key: bytes, private_key: rsa.RSAPrivateKey):
     """
     Decrypts a given symmetric key using the private key of the user
     :param encrypted_sym_key: rsa encrypted symmetric key
-    :param private_key:
+    :param private_key: rsa private key
     :return:
     """
 
@@ -142,7 +149,7 @@ def decrypt_symmetric_key(encrypted_sym_key, private_key):
     return decrypted_key
 
 
-def decrypt_models(models, sym_key):
+def decrypt_models(models: Union[List[str], List[os.PathLike]], sym_key: bytes):
     """
     Decrypts the given models using the provided symmetric key
     :param models: list of encrypted models
@@ -159,23 +166,18 @@ def decrypt_models(models, sym_key):
     return decr_models
 
 
-def hash_string(string):
+def hash_string(hash_inp: str):
     hasher = hashes.Hash(hashes.SHA512(), default_backend())
-    hasher.update(string.encode())
+    hasher.update(hash_inp.encode())
     return hasher.finalize()
 
 
-
-def load_config(config):
-
-    data = ""
-
+def load_config(config: json):
     with open(config) as f:
         data = json.load(f)
 
     print(data)
     return data
-
 
 
 def load_public_key(key: str):
@@ -189,7 +191,7 @@ def load_public_key(key: str):
     return public_key
 
 
-def verify_digital_signature(config):
+def verify_digital_signature(config: json):
     """
     Verifies the digital signature of the train_config by iterating over the list of signatures and verifying each one
     using the correct public key stored in the train configuration json
@@ -198,16 +200,17 @@ def verify_digital_signature(config):
 
     """
     ds = config["digital_signature"]
-    print(ds)
+
     for sig in ds:
-        public_key = load_public_key(
-            config["rsa_public_keys"][sig["station"]])
+        try:
+            public_key = load_public_key(
+                config["rsa_public_keys"][sig["station"]])
+        except:
+            raise ValueError("Error loading public key")
+
         public_key.verify(bytes.fromhex(sig["sig"][0]),
                           bytes.fromhex(sig["sig"][1]),
                           padding.PSS(mgf=padding.MGF1(hashes.SHA512()),
                                       salt_length=padding.PSS.MAX_LENGTH),
                           utils.Prehashed(hashes.SHA512())
                           )
-    print("All Valid")
-
-
