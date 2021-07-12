@@ -10,7 +10,7 @@ import re
 
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives import hashes
-#from fbs_runtime.application_context.PyQt5 import ApplicationContext
+from fbs_runtime.application_context.PyQt5 import ApplicationContext
 
 
 class SecurityValuesFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
