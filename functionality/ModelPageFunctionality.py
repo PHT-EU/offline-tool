@@ -109,6 +109,7 @@ class ModelPageFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
         :param
         :return:
         """
+
         file_dialog = QtWidgets.QFileDialog(self)
         keyfile2 = file_dialog.getOpenFileName(None, "Window Name", "")
         self.private_key_path = keyfile2[0]
