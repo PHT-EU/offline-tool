@@ -1,5 +1,5 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
-# from fbs_runtime.application_context.PyQt5 import ApplicationContext
+from fbs_runtime.application_context.PyQt5 import ApplicationContext
 from collections import OrderedDict
 from visualisation.ModelPage import Ui_MainWindow
 from visualisation.label_dictionary import Model_Page_func
@@ -113,6 +113,8 @@ class ModelPageFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
         file_dialog = QtWidgets.QFileDialog(self)
         keyfile2 = file_dialog.getOpenFileName(None, "Window Name", "")
         self.private_key_path = keyfile2[0]
+	if keyfile2[0] == None:
+	    return None
         private_key_psw = QtWidgets.QInputDialog.getText(self, "Password for Private Key",
                                                          "Enter the existing password for your Private Key:")
 
