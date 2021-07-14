@@ -88,6 +88,8 @@ class SecurityValuesFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
         """
         file_dialog = QtWidgets.QFileDialog(self)
         keyfile = file_dialog.getOpenFileName(None, "Window Name", "")
+        if keyfile[0] == "":
+            return None
         self.private_key_filepath = keyfile[0]
 
         private_key_psw = QtWidgets.QInputDialog.getText(self, "Password for Private Key",
