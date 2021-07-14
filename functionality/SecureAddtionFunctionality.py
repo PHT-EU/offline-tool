@@ -93,11 +93,6 @@ class SecureAdditionFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
                 self.public_key = public_key.n
         except:
             self.label_2.setText(Security_Page_func["pick_key_label_again"])
-            error_dialog = QtWidgets.QErrorMessage()
-            error_dialog.setWindowTitle("Invalid private key")
-            error_dialog.showMessage(
-                Security_Page_func["invalid_key_err"])
-            error_dialog.exec_()
         else:
             if self.private_key == "invalid":
                 self.label_2.setText(Security_Page_func["invalid_key"])

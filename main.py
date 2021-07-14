@@ -1,6 +1,6 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-from fbs_runtime.application_context.PyQt5 import ApplicationContext
+#from fbs_runtime.application_context.PyQt5 import ApplicationContext
 from visualisation.ChoosePage import Ui_MainWindow
 from functionality import ModelPageFunctionality
 from functionality import SecureAddtionFunctionality
