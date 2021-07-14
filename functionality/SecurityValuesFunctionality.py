@@ -77,7 +77,7 @@ class SecurityValuesFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
 
 
         else:
-            self.label.setText(Security_Page_func["dir_err"])
+            self.label.setText(Security_Page_func["key_err"])
 
 
     def pick_private_key_filepath(self):
