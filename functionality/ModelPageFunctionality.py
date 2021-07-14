@@ -113,8 +113,8 @@ class ModelPageFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
         file_dialog = QtWidgets.QFileDialog(self)
         keyfile2 = file_dialog.getOpenFileName(None, "Window Name", "")
         self.private_key_path = keyfile2[0]
-	if keyfile2[0] == None:
-	    return None
+        if keyfile2[0] == None:
+            return None
         private_key_psw = QtWidgets.QInputDialog.getText(self, "Password for Private Key",
                                                          "Enter the existing password for your Private Key:")
 
