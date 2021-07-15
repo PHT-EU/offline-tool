@@ -125,18 +125,18 @@ class SecureAdditionFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
             try:
                 self.public_key = int(self.public_key)
                 result = primes.decrypt_int(self.private_key, self.public_key, int(encrypted_string))
-                self.textEdit_2.setText("Number of patients decrypted: {}".format(result))
+                self.textEdit_2.setText("Decrypted homomorphic encrypted value: {}".format(result))
                 self.label_5.setText("Decryption was successfull")
             except:
                 error_dialog = QtWidgets.QErrorMessage()
                 error_dialog.setWindowTitle("Invalid format")
-                error_dialog.showMessage("Encrypted Count Query not in the right format. Please check your input.")
+                error_dialog.showMessage("Encrypted homomorphic value not in the right format. Please check your input.")
                 error_dialog.exec_()
 
         else:
             error_dialog = QtWidgets.QErrorMessage()
             error_dialog.setWindowTitle("Invalid format")
-            error_dialog.showMessage("Encrypted Count Query not in the right format. Please check your input.")
+            error_dialog.showMessage("Encrypted homomorphic value not in the right format. Please check your input.")
             error_dialog.exec_()
 
 

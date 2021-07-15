@@ -73,7 +73,7 @@ class SecurityValuesFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
                     encryption_func.store_keys(self.dir_path, rsa_private_key, rsa_public_key,  private_key_name[0])
                     self.label.setText(Security_Page_func["key_succ"] + chosen_direc)
                 except:
-                    self.label.setText(Security_Page_func["key_err"])
+                    self.label.setText(Security_Page_func["psw_err"])
 
 
         else:

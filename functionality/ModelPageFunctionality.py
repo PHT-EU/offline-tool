@@ -1,5 +1,5 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
-from fbs_runtime.application_context.PyQt5 import ApplicationContext
+#from fbs_runtime.application_context.PyQt5 import ApplicationContext
 from collections import OrderedDict
 from visualisation.ModelPage import Ui_MainWindow
 from visualisation.label_dictionary import Model_Page_func
