@@ -5,7 +5,7 @@
 # Created by: PyQt5 UI code generator 5.12.3
 #
 # WARNING! All changes made in this file will be lost!
-
+#
 #from fbs_runtime.application_context.PyQt5 import ApplicationContext
 from PyQt5 import QtCore, QtGui, QtWidgets
 from visualisation.label_dictionary import Model_Page_labels

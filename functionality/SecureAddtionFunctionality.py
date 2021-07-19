@@ -82,18 +82,14 @@ class SecureAdditionFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
         self.private_key_filepath = private_keyfile[0]
         self.public_key_filepath = self.private_key_filepath.split("_")
         self.public_key_filepath = "_".join(self.public_key_filepath[:-1]) + "_pk.p"
-        print(self.public_key_filepath)
-        print(self.private_key_filepath)
 
         try:
             self.private_key = pickle.load(open(self.private_key_filepath, "rb"))
-            print("private_key loaded : ", self.private_key)
             try:
                 public_key = open(self.public_key_filepath, "r")
                 self.public_key = public_key.read()
             except:
                 public_key = pickle.load(open(self.public_key_filepath, "rb"))
-                print("public_key loaded :", public_key)
                 self.public_key = public_key.n
         except:
             self.label_2.setText(Security_Page_func["pick_key_label_again"])
@@ -129,18 +125,18 @@ class SecureAdditionFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
             try:
                 self.public_key = int(self.public_key)
                 result = primes.decrypt_int(self.private_key, self.public_key, int(encrypted_string))
-                self.textEdit_2.setText("Number of patients decrypted: {}".format(result))
+                self.textEdit_2.setText("Decrypted homomorphic encrypted value: {}".format(result))
                 self.label_5.setText("Decryption was successfull")
             except:
                 error_dialog = QtWidgets.QErrorMessage()
                 error_dialog.setWindowTitle("Invalid format")
-                error_dialog.showMessage("Encrypted Count Query not in the right format. Please check your input.")
+                error_dialog.showMessage("Encrypted homomorphic value not in the right format. Please check your input.")
                 error_dialog.exec_()
 
         else:
             error_dialog = QtWidgets.QErrorMessage()
             error_dialog.setWindowTitle("Invalid format")
-            error_dialog.showMessage("Encrypted Count Query not in the right format. Please check your input.")
+            error_dialog.showMessage("Encrypted homomorphic value not in the right format. Please check your input.")
             error_dialog.exec_()
 
 
