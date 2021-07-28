@@ -1,5 +1,6 @@
 import random
 import sys
+import secrets
 
 
 def ipow(a, b, n):
@@ -63,7 +64,7 @@ def generate_prime(bits, k=None):
         k = default_k(bits)
 
     while True:
-        possible = random.randrange(2 ** (bits - 1) + 1, 2 ** bits) | 1
+        possible = secrets.randbits(bits)
         if is_probably_prime(possible, k):
             return possible
 
