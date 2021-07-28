@@ -64,7 +64,8 @@ def generate_prime(bits, k=None):
         k = default_k(bits)
 
     while True:
-        possible = secrets.randbits(bits)
+        possible = random.randrange(2 ** (bits - 1) + 1, 2 ** bits) | 1
+
         if is_probably_prime(possible, k):
             return possible
 
