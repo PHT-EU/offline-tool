@@ -1,7 +1,7 @@
 
 main_func_labels = {
-    "MIT License" : "MIT License" + "\n" + "\n" + "Copyright (c) 2020 Personal Health Train / Implementations / GermanMII / DIFUTURE / PHT-Offline-Tool" + "\n" + "\n" + "Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the Software), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:" + "\n" + "\n" + "The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software." + "\n" + "\n" + "THE SOFTWARE IS PROVIDED AS IS, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.",
-    "Copyright" : "Copyright" + " © " + "<a href=\"https://pht.difuture.de\"><font color=black> MIT </font></a>" + "created 2020, by Felix.B",
+    "MIT License" : "MIT License" + "\n" + "\n" + "Copyright (c) 2021 Personal Health Train / Implementations / GermanMII / DIFUTURE / PHT-Offline-Tool" + "\n" + "\n" + "Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the Software), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:" + "\n" + "\n" + "The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software." + "\n" + "\n" + "THE SOFTWARE IS PROVIDED AS IS, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.",
+    "Copyright" : "Copyright" + " © " + "<a href=\"https://gitlab.com/PersonalHealthTrain/implementations/germanmii/difuture/pht-offline-tool/-/blob/master/LICENSE\"><font color=black>MIT</font></a>" + " created 2021, by Felix.B",
 }
 
 choose_page_labels = {
@@ -10,7 +10,7 @@ choose_page_labels = {
     "label_right" : "Choose your model files and decrypt these using private and encrypted symmetric key",
     "button_right": "Model Page",
     "label_left" : "Generate your private and public keys aswell as hash signing for submitting valid trains",
-    "href_bottom": "<a href=\"https://pht.difuture.de\"><font color=black>pht.difuture.de</font></a>",
+    "href_bottom": "<a href=\"https://personalhealthtrain.de\"><font color=black>personalhealthtrain.de</font></a>",
     "signature" : "Created by Felix Bötte"
 }
 

@@ -105,7 +105,7 @@ class Ui_MainWindow(object):
         self.pushButton_2.setText(_translate("MainWindow", "Model Page"))
         self.pushButton_3.setText(_translate("MainWindow", "Secure Addition"))
         self.label_6.setText(_translate("MainWindow", "Key pair creation and decryption of results"))
-        self.label_4.setText(_translate("MainWindow", "Link to PHT/Difuture"))
+        self.label_4.setText(_translate("MainWindow", "<a href=\"https://personalhealthtrain.de\"><font color=black>PHT-TBI</font></a>"))
         self.label_5.setText(_translate("MainWindow", "Created by Felix Bötte"))
 
 
