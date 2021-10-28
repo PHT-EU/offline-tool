@@ -109,7 +109,7 @@ jobs:
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: target/fbs_tutorial_appSetup.exe
-          asset_name: fbs_tutorial_appSetup.exe
+          file: target/pht_offline_toolSetup.exe
+          asset_name: pht_offline_toolSetup.exe
           tag: ${{ github.ref }}
           overwrite: true
