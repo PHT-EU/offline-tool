@@ -8,6 +8,7 @@ from functionality import primes
 from functionality.primes import PrivateKey, PublicKey
 from functionality.SecurityValuesFunctionality import SecurityValuesFunctionality
 from functionality.SecureAddtionFunctionality import SecureAdditionFunctionality
+from PySide2 import QtXml
 
 import sys, platform
 from visualisation.label_dictionary import *
