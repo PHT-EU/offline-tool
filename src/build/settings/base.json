@@ -1,6 +1,6 @@
 {
-    "app_name": "fbs_tutorial_app",
-    "author": "Reto",
+    "app_name": "pht_offline_tool",
+    "author": "PHT-Medic",
     "main_module": "src/main/python/main.py",
     "version": "0.0.5"
 }
