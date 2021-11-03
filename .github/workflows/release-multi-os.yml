@@ -49,8 +49,8 @@ jobs:
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: target/fbs_tutorial_app.deb
-          asset_name: fbs_tutorial_app.deb
+          file: target/pht_offline_tool.deb
+          asset_name: pht_offline_tool.deb
           tag: ${{ github.ref }}
           overwrite: true
 
@@ -79,8 +79,8 @@ jobs:
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: target/fbs_tutorial_app.dmg
-          asset_name: fbs_tutorial_app.dmg
+          file: target/pht_offline_tool.dmg
+          asset_name: pht_offline_tool.dmg
           tag: ${{ github.ref }}
           overwrite: true
 
