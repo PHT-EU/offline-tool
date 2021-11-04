@@ -24,7 +24,7 @@ class Ui_MainWindow(object):
         self.label_3 = QtWidgets.QLabel(self.centralwidget)
         self.label_3.setText("")
         appctxt = ApplicationContext()
-        self.image_path = self.appctxt.get_resource('images/PHT_offline-tool.png')
+        self.image_path = appctxt.get_resource('images/PHT_offline-tool.png')
         self.label_3.setPixmap(QtGui.QPixmap(self.image_path))
 
         # self.label_3.setPixmap(QtGui.QPixmap("./visualisation/PHT_offline-tool.png"))
