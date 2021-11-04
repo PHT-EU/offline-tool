@@ -26,6 +26,7 @@ jobs:
           pip install -r requirements.txt
       - name: Run fbs and freeze application
         run: |
+          cp -vf venv/lib/python3.6/site-packages/shiboken2/libshiboken2.abi3.5.13.dylib  venv/lib/python3.6/site-packages/PySide2/
           fbs freeze
           fbs installer
       - name: Create Release
