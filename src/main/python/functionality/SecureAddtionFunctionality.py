@@ -78,7 +78,7 @@ class SecureAdditionFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
         :return:
         """
         file_dialog = QtWidgets.QFileDialog(self)
-        private_keyfile = file_dialog.getOpenFileName(None, "Window Name", "")
+        private_keyfile = file_dialog.getOpenFileName(None, "Select Private Key", "")
         self.private_key_filepath = private_keyfile[0]
         self.public_key_filepath = self.private_key_filepath.split("_")
         self.public_key_filepath = "_".join(self.public_key_filepath[:-1]) + "_pk.p"

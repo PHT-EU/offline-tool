@@ -87,7 +87,7 @@ class SecurityValuesFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
         :return:
         """
         file_dialog = QtWidgets.QFileDialog(self)
-        keyfile = file_dialog.getOpenFileName(None, "Window Name", "")
+        keyfile = file_dialog.getOpenFileName(None, "Select Private Key", "")
         if keyfile[0] == "":
             return None
         self.private_key_filepath = keyfile[0]

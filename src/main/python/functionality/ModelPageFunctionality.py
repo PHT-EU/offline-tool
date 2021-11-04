@@ -50,7 +50,7 @@ class ModelPageFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
         :param
         :return:
         """
-        keyfile1 = QtWidgets.QFileDialog.getOpenFileName(self)
+        keyfile1 = QtWidgets.QFileDialog.getOpenFileName(self, "Select Encrypted Key", "")
         self.encryp_key_path = keyfile1[0]
 
         if self.encryp_key_path != "":
@@ -67,7 +67,7 @@ class ModelPageFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
         :return:
         """
 
-        config_file = QtWidgets.QFileDialog.getOpenFileName(self)
+        config_file = QtWidgets.QFileDialog.getOpenFileName(self, "Select Train Config", "")
         self.config_file_path = config_file[0]
 
         if self.config_file_path != "":
@@ -116,7 +116,7 @@ class ModelPageFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
         """
 
         file_dialog = QtWidgets.QFileDialog(self)
-        keyfile2 = file_dialog.getOpenFileName(None, "Window Name", "")
+        keyfile2 = file_dialog.getOpenFileName(None, "Select Private Key", "")
         self.private_key_path = keyfile2[0]
         if keyfile2[0] == "":
             return None
@@ -169,7 +169,7 @@ class ModelPageFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
         :param
         :return:
         """
-        chosen_dir = QtWidgets.QFileDialog.getExistingDirectory(self)
+        chosen_dir = QtWidgets.QFileDialog.getExistingDirectory(self, "Select Model Files Directory", "")
         self.model_dir = chosen_dir
         self.dir_list = []
         self.listWidget.clear()
