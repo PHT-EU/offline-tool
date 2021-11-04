@@ -1,6 +1,6 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-#from fbs_runtime.application_context.PyQt5 import ApplicationContext
+from fbs_runtime.application_context.PyQt5 import ApplicationContext
 from visualisation.ChoosePage import Ui_MainWindow
 from functionality import ModelPageFunctionality
 from functionality import SecureAddtionFunctionality
@@ -54,6 +54,7 @@ class ChoosePageFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
 
 
 if __name__ == "__main__":
+    appctxt = ApplicationContext()
     app = QtWidgets.QApplication(sys.argv)
     #test
     #app.setStyleSheet(open("./visualisation/darkorange.stylesheet").read())
@@ -63,4 +64,6 @@ if __name__ == "__main__":
         None
     nextGui = ChoosePageFunctionality()
     nextGui.show()
-    sys.exit(app.exec_())
+    exit_code = appctxt.app.exec()
+    sys.exit(exit_code)
+    #sys.exit(app.exec_())

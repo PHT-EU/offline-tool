@@ -1,5 +1,5 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
-#from fbs_runtime.application_context.PyQt5 import ApplicationContext
+# from fbs_runtime.application_context.PyQt5 import ApplicationContext
 from collections import OrderedDict
 from visualisation.ModelPage import Ui_MainWindow
 from visualisation.label_dictionary import Model_Page_func
@@ -74,20 +74,12 @@ class ModelPageFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
 
             try:
                 config = encryption_func.load_config(self.config_file_path)
+                print(config)
+                print(Model_Page_func["config_succ_load"])
                 self.label_2.setText(Model_Page_func["config_succ_load"])
 
-                try:
-                    encryption_func.verify_digital_signature(config)
-                    self.label_2.setText(Model_Page_func["config_succ_sign"])
-                except ValueError as e:
-                    self.label_2.setText(f"Error verifying signature:\n {e}")
-                except InvalidSignature as e:
-                    self.label_2.setText(f"Error verifying signature:\n {e}")
-                except:
-                    self.label_2.setText(Model_Page_func["config_failed_sign"])
-                    return None
-
-            except:
+            except Exception as e:
+                print(e)
                 self.label_2.setText(Model_Page_func["config_failed_load"])
                 error_dialog = QtWidgets.QErrorMessage()
                 error_dialog.setWindowTitle("Error while loading config file")
@@ -95,11 +87,24 @@ class ModelPageFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
                     Model_Page_func["config_failed_load"])
                 error_dialog.exec_()
                 return None
+
+            try:
+                encryption_func.verify_digital_signature(config)
+                self.label_2.setText(Model_Page_func["config_succ_sign"])
+            except ValueError as e:
+                self.label_2.setText(f"Error verifying signature:\n {e}")
+            except InvalidSignature as e:
+                self.label_2.setText(f"Error verifying signature:\n {e}")
+            except:
+                self.label_2.setText(Model_Page_func["config_failed_sign"])
+                return None
+
             try:
                 self.encrypted_key = bytes.fromhex(config["user_encrypted_sym_key"])
                 self.label_2.setText(
                     Model_Page_func["config_encry_key_succ"])
-            except:
+            except Exception as e:
+                print(e)
                 self.label_2.setText(
                     Model_Page_func["config_encry_key_failed"])
 
@@ -233,7 +238,6 @@ class ModelPageFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
             self.index_list.append(self.listWidget.currentRow())
         elif self.listWidget.currentRow() in self.index_list:
             self.index_list.remove(self.listWidget.currentRow())
-
 
         if len(self.index_list) == 0:
             self.label_5.setText(Model_Page_func["model_label"])
