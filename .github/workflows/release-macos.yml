@@ -26,6 +26,7 @@ jobs:
           pip install -r requirements.txt
       - name: Run fbs and freeze application
         run: |
+          ls -la
           fbs freeze
           fbs installer
       - name: Create Release
