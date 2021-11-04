@@ -1,5 +1,2 @@
-This is a release for all operating systems.
-The text for the release is grabbed from
-the file `release_text.md` if it exists.
-If not, no body is added to the release.
-You can always go in and change the release text later.
+This is the first release of the PHT offline-tool which is used for key generation and decryption of results.
+The release includes versions for all operating systems.
