@@ -23,7 +23,7 @@ class Ui_MainWindow(object):
         self.gridLayout.setObjectName("gridLayout")
         self.label_3 = QtWidgets.QLabel(self.centralwidget)
         self.label_3.setText("")
-        self.appctxt = ApplicationContext()
+        appctxt = ApplicationContext()
         self.image_path = self.appctxt.get_resource('images/PHT_offline-tool.png')
         self.label_3.setPixmap(QtGui.QPixmap(self.image_path))
 
