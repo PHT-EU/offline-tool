@@ -2,17 +2,23 @@
 
 Offline Tool for key generation and decryption of results
 
-## Getting Started
+## Documentation
+The documentation of our PHT Offline Tool can be found [here](https://pht-medic.github.io/documentation/offline_tool/)
 
-Before you can start the application you need to import a couple modules to your python interpreter:
+Please install the version based on your local OS. Currently we support: Windows,
+Mac and Linux. If you want to work on the code itself follow the instructions below.
+
+## Getting Started locally
+This version depends on Python3.6 - please install it locally [https://www.python.org/downloads/release/python-360/](https://www.python.org/downloads/release/python-360/).
+Before you can start the application you need to import a couple modules to your python interpreter. We suggest to create a virtual enviorment
+and install the requirements. Go with your command to the cloned repository directory and create a virtualenv. Within this 
+virtual environment install the dependencies.
 
 ```
-pip install cryptography
-pip install numpy
-pip install PyQt5
+pip install -r requirements.txt
 ```
 
-To run the the GUI in the right order on your local machine you start the script 
+To run the GUI in the right order on your local machine you start the script 
 
 ```
 main.py
@@ -47,14 +53,6 @@ For the application is a dark-mode available. To activate it uncomment the line 
 
  ```
 #app.setStyleSheet(open("./visualisation/darkorange.stylesheet").read())
-```
-
-## Create standalone application
-
-To create an application that you can use on different machines and operating systems follow the tutorial by mhermrmann
-
-```
-https://github.com/mherrmann/fbs-tutorial
 ```
 
 
