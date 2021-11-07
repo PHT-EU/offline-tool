@@ -1,0 +1,33 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+cffi = "*"
+cryptography = "*"
+helpdev = "*"
+importlib-metadata = "*"
+numpy = "*"
+pycparser = "*"
+qdarkgraystyle = "*"
+shiboken2 = "*"
+sip = "*"
+six = "*"
+wrapt = "*"
+zipp = "*"
+lxml = "*"
+fbs = "*"
+requests = "*"
+pyinstaller = "*"
+Deprecated = "*"
+PyQt5 = "==5.12"
+QDarkStyle = "*"
+QtPy = "*"
+PyQt5-sip = "*"
+pywin32 = "*"
+
+[dev-packages]
+
+[requires]
+python_version = "3.6"
