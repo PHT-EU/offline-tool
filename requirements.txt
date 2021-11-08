@@ -1,5 +1,5 @@
 Deprecated
-PyQt5==5.12
+PyQt5==5.12.3
 QDarkStyle
 QtPy
 cffi
