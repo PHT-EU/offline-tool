@@ -96,6 +96,7 @@ class Ui_MainWindow(object):
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
+
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "PHT offline tool"))
@@ -105,10 +106,8 @@ class Ui_MainWindow(object):
         self.pushButton_2.setText(_translate("MainWindow", "Model Page"))
         self.pushButton_3.setText(_translate("MainWindow", "Secure Addition"))
         self.label_6.setText(_translate("MainWindow", "Key pair creation and decryption of results"))
-        self.label_4.setText(_translate("MainWindow", "<a href=\"https://personalhealthtrain.de\"><font color=black>PHT-TBI</font></a>"))
+        self.label_4.setText(_translate("MainWindow", "<a href=\"https://personalhealthtrain.de\"><font color=black>PHT-meDIC</font></a>"))
         self.label_5.setText(_translate("MainWindow", "Created by Felix Bötte"))
-
-
 
 
 #self.pht_link ="<a href=\"https://pht.difuture.de\"><font color=black>pht.difuture.de</font></a>"
@@ -119,9 +118,9 @@ class Ui_MainWindow(object):
         self.pushButton_2.setStyleSheet("font: 14px Arial")
         self.label.setStyleSheet("font: 14px Arial")
 
-        '''self.appctxt = ApplicationContext()
-        self.image_path = self.appctxt.get_resource('PHT_offline-tool.png')
-        self.label_3.setPixmap(QtGui.QPixmap(self.image_path)) '''
+        self.appctxt = ApplicationContext()
+        self.image_path = self.appctxt.get_resource('../resources/base/images/PHT_offline-tool.png')
+        self.label_3.setPixmap(QtGui.QPixmap(self.image_path))
 
-        self.label_3.setPixmap(QtGui.QPixmap("src/main/python/visualisation/PHT_offline-tool.png"))
+        #self.label_3.setPixmap(QtGui.QPixmap("PHT_offline-tool.png"))
         self.label_3.setScaledContents(True)

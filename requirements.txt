@@ -1,5 +1,5 @@
 Deprecated==1.2.9
-PyQt5==5.15
+PyQt5==5.9.2
 QDarkStyle==2.8.1
 QtPy==1.9.0
 cffi==1.14.0
@@ -12,7 +12,7 @@ pycparser==2.19
 qdarkgraystyle==1.0.2
 shiboken2==5.14.0
 PyQt5-sip==12.8
-sip==5.0.0
+sip==4.19.8
 six==1.14.0
 wrapt==1.12.1
 zipp==3.1.0
