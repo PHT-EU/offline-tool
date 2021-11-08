@@ -123,5 +123,5 @@ class Ui_MainWindow(object):
         self.image_path = self.appctxt.get_resource('PHT_offline-tool.png')
         self.label_3.setPixmap(QtGui.QPixmap(self.image_path)) '''
 
-        self.label_3.setPixmap(QtGui.QPixmap("./visualisation/PHT_offline-tool.png"))
+        self.label_3.setPixmap(QtGui.QPixmap("../resources/base/images/PHT_offline-tool.png"))
         self.label_3.setScaledContents(True)
