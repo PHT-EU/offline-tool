@@ -102,11 +102,11 @@ class ModelPageFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
             try:
                 self.encrypted_key = bytes.fromhex(config["user_encrypted_sym_key"])
                 self.label_2.setText(
-                    Model_Page_func["config_encry_key_succ"])
+                    Model_Page_func["config_succ_load"])
             except Exception as e:
                 print(e)
                 self.label_2.setText(
-                    Model_Page_func["config_encry_key_failed"])
+                    Model_Page_func["config_failed_load"])
 
     def select_private_key(self):
         """
