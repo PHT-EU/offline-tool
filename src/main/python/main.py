@@ -8,7 +8,7 @@ from functionality import primes
 from functionality.primes import PrivateKey, PublicKey
 from functionality.SecurityValuesFunctionality import SecurityValuesFunctionality
 from functionality.SecureAddtionFunctionality import SecureAdditionFunctionality
-
+import os
 import sys, platform
 from visualisation.label_dictionary import *
 #import qdarkstyle
@@ -56,6 +56,7 @@ class ChoosePageFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
 if __name__ == "__main__":
     appctxt = ApplicationContext()
     app = QtWidgets.QApplication(sys.argv)
+    os.environ['QT_MAC_WANTS_LAYER'] = '1'
     #test
     #app.setStyleSheet(open("./visualisation/darkorange.stylesheet").read())
     if platform.system() == "Windows" or platform.system() == "Darwin":
