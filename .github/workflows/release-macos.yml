@@ -26,7 +26,6 @@ jobs:
           pip install -r requirements.txt
       - name: Run fbs and freeze application
         run: |
-          ls -la
           fbs freeze
           fbs installer
       - name: Create Release
@@ -38,7 +37,7 @@ jobs:
           tag_name: ${{ github.ref }}
           release_name: Release ${{ github.ref }}
           # body: ""  # release message, alternative to body_path
-          # body_path: release_text.md  # uncomment if not used
+          body_path: release_text.md  # uncomment if not used
           draft: false
           prerelease: false
       - name: Upload Release Asset
