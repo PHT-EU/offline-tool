@@ -10,6 +10,7 @@ from fbs_runtime.application_context.PyQt5 import ApplicationContext
 from PyQt5 import QtCore, QtGui, QtWidgets
 from visualisation.label_dictionary import choose_page_labels
 import qdarkstyle
+import os, sys
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -123,5 +124,6 @@ class Ui_MainWindow(object):
         self.image_path = self.appctxt.get_resource('PHT_offline-tool.png')
         self.label_3.setPixmap(QtGui.QPixmap(self.image_path)) '''
 
-        self.label_3.setPixmap(QtGui.QPixmap("../resources/base/images/PHT_offline-tool.png"))
+        self.label_3.setPixmap(QtGui.QPixmap(os.path.join(os.path.abspath(os.path.dirname(sys.argv[0])), 'images', 'PHT_offline-tool.png')))
+        #self.label_3.setPixmap(QtGui.QPixmap("../resources/base/images/PHT_offline-tool.png"))
         self.label_3.setScaledContents(True)
