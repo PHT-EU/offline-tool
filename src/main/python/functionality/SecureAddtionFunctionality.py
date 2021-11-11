@@ -7,6 +7,13 @@ import pickle
 from visualisation.label_dictionary import Security_Page_func
 
 
+public_key_file_ = None
+public_key_filepath_ = None
+private_key_file_ = None
+private_key_filepath_ = None
+
+
+
 class SecureAdditionFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
     def __init__(self, parent=None):
         super(SecureAdditionFunctionality, self).__init__(parent)
@@ -22,6 +29,9 @@ class SecureAdditionFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
         self.pushButton.clicked.connect(self.generate_key_pair)
         self.pushButton_2.clicked.connect(self.pick_private_key_filepath)
         self.pushButton_3.clicked.connect(self.decrypt)
+
+        if private_key_file_ is not None:
+            self.label_2.setText(Security_Page_func["load_key"] + private_key_filepath_)
 
 
 
@@ -53,8 +63,6 @@ class SecureAdditionFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
                 else:
                     self.private_key_name = chosen_dir + '/' + private_key_name[0]
                     self.public_key_name = chosen_dir + '/' + private_key_name[0]
-                    print("PublicKey Path : ", self.public_key_name + "_pk.p")
-                    print("PrivateKey Path : ", self.private_key_name + "_sk.p")
 
                 try:
                     private_key, public_key = primes.generate_keypair(128)
@@ -77,22 +85,34 @@ class SecureAdditionFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
         :param
         :return:
         """
+        global public_key_file_
+        global private_key_file_
+        global public_key_filepath_
+        global private_key_filepath_
+
+
         file_dialog = QtWidgets.QFileDialog(self)
-        private_keyfile = file_dialog.getOpenFileName(None, "Select Private Key", "")
+        private_keyfile = file_dialog.getOpenFileName(None, "Select Private Key", "", options=QtWidgets.QFileDialog.DontUseNativeDialog)
         self.private_key_filepath = private_keyfile[0]
+        private_key_filepath_ = private_keyfile[0]
+
         self.public_key_filepath = self.private_key_filepath.split("_")
         self.public_key_filepath = "_".join(self.public_key_filepath[:-1]) + "_pk.p"
 
+
+        public_key_filepath_ = self.public_key_filepath
+        print("Private Keyfile Filepath: {}".format(self.private_key_filepath))
+        print("Public Key Filepath {}".format(self.public_key_filepath))
+
+
+        self.private_key = pickle.load(open(self.private_key_filepath, "rb"))
+        private_key_file_ = self.private_key
         try:
-            self.private_key = pickle.load(open(self.private_key_filepath, "rb"))
-            try:
-                public_key = open(self.public_key_filepath, "r")
-                self.public_key = public_key.read()
-            except:
-                public_key = pickle.load(open(self.public_key_filepath, "rb"))
-                self.public_key = public_key.n
+            self.public_key = open(self.public_key_filepath, "r").read()
+            public_key_file_ = self.public_key
         except:
-            self.label_2.setText(Security_Page_func["pick_key_label_again"])
+            self.public_key = pickle.load(open(self.public_key_filepath, "rb")).n
+            public_key_file_ = self.public_key
         else:
             if self.private_key == "invalid":
                 self.label_2.setText(Security_Page_func["invalid_key"])
@@ -112,10 +132,13 @@ class SecureAdditionFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
         :param
         :return: signed-hash in hex-format
         """
+        global public_key_file_
+        global private_key_file_
+
         encrypted_string = self.textEdit.toPlainText().rstrip().lstrip()
 
 
-        if self.private_key is None:
+        if private_key_file_ is None:
             error_dialog = QtWidgets.QErrorMessage()
             error_dialog.setWindowTitle("Private key missing")
             error_dialog.showMessage(Security_Page_func["no_pk_hash_err"])
@@ -123,8 +146,8 @@ class SecureAdditionFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
         elif len(encrypted_string) > 1:
 
             try:
-                self.public_key = int(self.public_key)
-                result = primes.decrypt_int(self.private_key, self.public_key, int(encrypted_string))
+                public_key = int(public_key_file_)
+                result = primes.decrypt_int(private_key_file_, public_key, int(encrypted_string))
                 self.textEdit_2.setText("Decrypted homomorphic encrypted value: {}".format(result))
                 self.label_5.setText("Decryption was successfull")
             except:
