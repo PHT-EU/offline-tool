@@ -12,6 +12,9 @@ from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives import hashes
 #from fbs_runtime.application_context.PyQt5 import ApplicationContext
 
+private_key = None
+private_key_filepath = None
+
 
 class SecurityValuesFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
 
@@ -29,6 +32,12 @@ class SecurityValuesFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
         self.pushButton.clicked.connect(self.generate_private_key)
         self.pushButton_5.clicked.connect(self.return_page)
         self.pushButton_4.clicked.connect(self.copy_hash)
+
+
+
+        if private_key is not None:
+            print("PrivateKey : ", private_key)
+            self.label_2.setText(Model_Page_func["pk_suc_label"] + private_key_filepath)
 
     def browse_direc(self):
         chosen_direc = QtWidgets.QFileDialog.getExistingDirectory(self)
@@ -87,16 +96,23 @@ class SecurityValuesFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
         :return:
         """
         file_dialog = QtWidgets.QFileDialog(self)
-        keyfile = file_dialog.getOpenFileName(None, "Select Private Key", "")
+        keyfile = file_dialog.getOpenFileName(None, "Select Private Key", "", options=QtWidgets.QFileDialog.DontUseNativeDialog)
         if keyfile[0] == "":
             return None
         self.private_key_filepath = keyfile[0]
+        global private_key_filepath
+        private_key_filepath = keyfile[0]
+        print(private_key_filepath)
 
         private_key_psw = QtWidgets.QInputDialog.getText(self, "Password for Private Key",
                                                          "Enter the existing password for your Private Key:")
 
+
         try:
             self.private_key = encryption_func.load_private_key(self.private_key_filepath, private_key_psw)
+            global private_key
+            private_key = self.private_key
+            print(private_key)
         except:
             self.label_2.setText("Error while loading private key: Invalid Input")
         else:
@@ -132,14 +148,14 @@ class SecurityValuesFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
         except:
             self.label_5.setText("Error with the hash. Please check your input.")
 
-        if self.private_key is None:
+        if private_key is None:
             error_dialog = QtWidgets.QErrorMessage()
             error_dialog.setWindowTitle("Private key missing")
             error_dialog.showMessage(Security_Page_func["no_pk_hash_err"])
             error_dialog.exec_()
         elif len(hash_string) > 1:
             try:
-                signature = encryption_func.sign_hash(self.private_key, hash_string)
+                signature = encryption_func.sign_hash(private_key, hash_string)
                 signature_hex = signature.hex()
                 self.textEdit_2.setText(signature_hex)
                 self.label_5.setText(Security_Page_func["hash_sign"])

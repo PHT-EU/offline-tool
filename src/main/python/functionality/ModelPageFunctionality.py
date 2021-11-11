@@ -9,6 +9,14 @@ import sys, platform, subprocess, ntpath, main, os
 import pickle
 from cryptography.exceptions import InvalidSignature
 
+private_key_mp = None
+private_key_mp_path = None
+train_config = None
+train_config_path = None
+encrypted_key = None
+
+model_files_directory = None
+
 
 class ModelPageFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
     def __init__(self, parent=None):
@@ -33,6 +41,16 @@ class ModelPageFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
         self.pushButton_3.clicked.connect(self.select_private_key)
         self.pushButton_6.clicked.connect(self.show_decrypted_files)
         self.pushButton_7.clicked.connect(self.move_secure_addition_page)
+
+        if train_config is not None:
+            self.label_2.setText(Model_Page_func["config_succ_load"] + train_config_path)
+        if private_key_mp is not None:
+            self.label_3.setText(Model_Page_func["pk_suc_label"] + private_key_mp_path)
+        if model_files_directory is not None:
+            self.restore_chosen_modelfile_direc()
+
+
+
 
     def move_return_page(self):
         self.Choose_Page_Frame = main.ChoosePageFunctionality()
@@ -67,13 +85,19 @@ class ModelPageFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
         :return:
         """
 
-        config_file = QtWidgets.QFileDialog.getOpenFileName(self, "Select Train Config", "")
+        global train_config
+        global train_config_path
+        global encrypted_key
+
+        config_file = QtWidgets.QFileDialog.getOpenFileName(self, "Select Train Config", "", options=QtWidgets.QFileDialog.DontUseNativeDialog)
         self.config_file_path = config_file[0]
+        train_config_path = self.config_file_path
 
         if self.config_file_path != "":
 
             try:
                 config = encryption_func.load_config(self.config_file_path)
+                train_config = config
                 print(config)
                 print(Model_Page_func["config_succ_load"])
                 self.label_2.setText(Model_Page_func["config_succ_load"])
@@ -101,6 +125,7 @@ class ModelPageFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
 
             try:
                 self.encrypted_key = bytes.fromhex(config["user_encrypted_sym_key"])
+                encrypted_key = self.encrypted_key
                 self.label_2.setText(
                     Model_Page_func["config_succ_load"])
             except Exception as e:
@@ -115,9 +140,13 @@ class ModelPageFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
         :return:
         """
 
+        global private_key_mp
+        global private_key_mp_path
+
         file_dialog = QtWidgets.QFileDialog(self)
-        keyfile2 = file_dialog.getOpenFileName(None, "Select Private Key", "")
+        keyfile2 = file_dialog.getOpenFileName(None, "Select Private Key", "", options=QtWidgets.QFileDialog.DontUseNativeDialog)
         self.private_key_path = keyfile2[0]
+        private_key_mp_path = self.private_key_path
         if keyfile2[0] == "":
             return None
         private_key_psw = QtWidgets.QInputDialog.getText(self, "Password for Private Key",
@@ -125,6 +154,7 @@ class ModelPageFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
 
         try:
             self.private_key = encryption_func.load_private_key(self.private_key_path, private_key_psw)
+            private_key_mp = self.private_key
         except:
             self.label_3.setText("Error while loading private key: Invalid Input")
         else:
@@ -169,7 +199,10 @@ class ModelPageFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
         :param
         :return:
         """
-        chosen_dir = QtWidgets.QFileDialog.getExistingDirectory(self, "Select Model Files Directory", "")
+        global model_files_directory
+
+        chosen_dir = QtWidgets.QFileDialog.getExistingDirectory(self, "Select Model Files Directory", "", options=QtWidgets.QFileDialog.DontUseNativeDialog)
+        model_files_directory = chosen_dir
         self.model_dir = chosen_dir
         self.dir_list = []
         self.listWidget.clear()
@@ -189,6 +222,40 @@ class ModelPageFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
         if self.model_dir != "":
 
             self.label.setText(Model_Page_func["dir_label"] + self.model_dir)
+            self.label_6.setText(Model_Page_func["dir_label2"])
+
+            for name in self.dir_list:
+                self.listWidget.addItem(name)
+
+            if self.counter == 1:
+                self.listWidget.itemClicked.connect(self.on_click_listbox)
+            else:
+                None
+        else:
+            self.label.setText(Model_Page_func["dir_err_label"])
+
+
+    def restore_chosen_modelfile_direc(self):
+
+        model_dir = model_files_directory
+        self.dir_list = []
+        self.listWidget.clear()
+        self.selected_path = []
+        self.counter += 1
+        self.label_5.setText(Model_Page_func["model_label"])
+        del self.index_list[:]
+
+        if model_dir == "":
+            self.label.setText(Model_Page_func["no_direc_label"])
+        else:
+            for id in list(self.filter_out_dir(model_dir, 1))[0][2]:
+                self.dir_list.append(id)
+
+        self.dir_list = sorted(self.dir_list, key=str.lower)
+
+        if model_dir != "":
+
+            self.label.setText(Model_Page_func["dir_label"] + model_dir)
             self.label_6.setText(Model_Page_func["dir_label2"])
 
             for name in self.dir_list:
@@ -233,7 +300,7 @@ class ModelPageFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
         :return:
         """
 
-        self.file_list = self.get_filepaths_of_dir(self.model_dir)
+        self.file_list = self.get_filepaths_of_dir(model_files_directory)
         if self.listWidget.currentRow() not in self.index_list:
             self.index_list.append(self.listWidget.currentRow())
         elif self.listWidget.currentRow() in self.index_list:
@@ -257,21 +324,23 @@ class ModelPageFunctionality(QtWidgets.QMainWindow, Ui_MainWindow):
         :param
         :return: decrypted models in .txt format
         """
+        global encrypted_key
+
         selected_models = self.selected_path
 
-        if self.private_key is None:
+        if private_key_mp is None:
             error_dialog = QtWidgets.QErrorMessage()
             error_dialog.setWindowTitle("Missing Private Key")
             error_dialog.showMessage(Model_Page_func["missing_pk_msg"])
             error_dialog.exec_()
-        elif self.encrypted_key == None:
+        elif encrypted_key is None:
             error_dialog = QtWidgets.QErrorMessage()
             error_dialog.setWindowTitle("Missing Encrypted Key")
             error_dialog.showMessage("Missing Encrypted Key. Please load your Config file before decrypting.")
             error_dialog.exec_()
         else:
             try:
-                decrypted_sym_key = encryption_func.decrypt_symmetric_key(self.encrypted_key, self.private_key)
+                decrypted_sym_key = encryption_func.decrypt_symmetric_key(encrypted_key, private_key_mp)
                 file_encryptor = encryption_func.FileEncryptor(decrypted_sym_key)
                 decrypted_models = encryption_func.decrypt_models(selected_models, decrypted_sym_key)
             except:
