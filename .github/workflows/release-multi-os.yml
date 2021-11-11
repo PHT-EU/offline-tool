@@ -50,8 +50,8 @@ jobs:
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: target/PHT Offline Tool.deb
-          asset_name: PHT Offline Tool.deb
+          file: target/PHT_Offline_Tool.deb
+          asset_name: PHT_Offline_Tool.deb
           tag: ${{ github.ref }}
           overwrite: true
 
@@ -80,8 +80,8 @@ jobs:
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: target/PHT Offline Tool.dmg
-          asset_name: PHT Offline Tool.dmg
+          file: target/PHT_Offline_Tool.dmg
+          asset_name: PHT_Offline_Tool.dmg
           tag: ${{ github.ref }}
           overwrite: true
 
@@ -110,7 +110,7 @@ jobs:
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: target/PHT Offline ToolSetup.exe
-          asset_name: PHT Offline ToolSetup.exe
+          file: target/PHT_Offline_ToolSetup.exe
+          asset_name: PHT_Offline_ToolSetup.exe
           tag: ${{ github.ref }}
           overwrite: true

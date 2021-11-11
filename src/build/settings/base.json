@@ -1,5 +1,5 @@
 {
-    "app_name": "PHT Offline Tool",
+    "app_name": "PHT_Offline_Tool",
     "author": "PHT-Medic",
     "main_module": "src/main/python/main.py",
     "version": "0.0.5"
