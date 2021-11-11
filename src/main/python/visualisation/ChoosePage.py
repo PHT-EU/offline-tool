@@ -120,10 +120,10 @@ class Ui_MainWindow(object):
         self.pushButton_2.setStyleSheet("font: 14px Arial")
         self.label.setStyleSheet("font: 14px Arial")
 
-        '''self.appctxt = ApplicationContext()
+        self.appctxt = ApplicationContext()
         self.image_path = self.appctxt.get_resource('PHT_offline-tool.png')
-        self.label_3.setPixmap(QtGui.QPixmap(self.image_path)) '''
+        self.label_3.setPixmap(QtGui.QPixmap(self.image_path))
 
-        self.label_3.setPixmap(QtGui.QPixmap(os.path.join(os.path.abspath(os.path.dirname(sys.argv[0])), 'images', 'PHT_offline-tool.png')))
+        #self.label_3.setPixmap(QtGui.QPixmap(os.path.join(os.path.abspath(os.path.dirname(sys.argv[0])), 'images', 'PHT_offline-tool.png')))
         #self.label_3.setPixmap(QtGui.QPixmap("../resources/base/images/PHT_offline-tool.png"))
         self.label_3.setScaledContents(True)
