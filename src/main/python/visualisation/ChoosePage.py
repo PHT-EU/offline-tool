@@ -23,9 +23,9 @@ class Ui_MainWindow(object):
         self.gridLayout.setObjectName("gridLayout")
         self.label_3 = QtWidgets.QLabel(self.centralwidget)
         self.label_3.setText("")
-        appctxt = ApplicationContext()
-        self.image_path = appctxt.get_resource('images/PHT_offline-tool.png')
-        self.label_3.setPixmap(QtGui.QPixmap(self.image_path))
+        #self.appctxt = ApplicationContext()
+        #self.image_path = self.appctxt.get_resource('./visualisation/PHT_offline-tool.png')
+        #self.label_3.setPixmap(QtGui.QPixmap(self.image_path))
 
         # self.label_3.setPixmap(QtGui.QPixmap("./visualisation/PHT_offline-tool.png"))
         self.label_3.setScaledContents(True)
@@ -110,6 +110,8 @@ class Ui_MainWindow(object):
         self.label_5.setText(_translate("MainWindow", "Created by Felix Bötte"))
 
 
+
+
 #self.pht_link ="<a href=\"https://pht.difuture.de\"><font color=black>pht.difuture.de</font></a>"
 
 
@@ -119,7 +121,7 @@ class Ui_MainWindow(object):
         self.label.setStyleSheet("font: 14px Arial")
 
         self.appctxt = ApplicationContext()
-        self.image_path = self.appctxt.get_resource('../resources/base/images/PHT_offline-tool.png')
+        self.image_path = self.appctxt.get_resource('PHT_offline-tool.png')
         self.label_3.setPixmap(QtGui.QPixmap(self.image_path))
 
         #self.label_3.setPixmap(QtGui.QPixmap("PHT_offline-tool.png"))
